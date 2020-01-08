@@ -11,5 +11,10 @@ namespace ContactLib
         {
 
         }
+
+        protected override decimal CalculateTax(float bsal)
+        {
+            return (decimal)(tax = 0.3f * bsal);
+        }
     }
 }

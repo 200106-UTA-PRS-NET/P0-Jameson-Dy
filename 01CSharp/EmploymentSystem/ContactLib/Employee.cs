@@ -23,6 +23,21 @@ namespace ContactLib
             tax = 0.3f * bsal;
             return salary = (decimal) (bsal + hra + bonus - tax - medical);
         }
+        public decimal GetSalary(float bsal)
+        {
+            tax = 0.3f * bsal;
+            return salary = (decimal)(bsal + hra + bonus - tax - medical);
+        }
+        public decimal GetSalary(double bsal, float bonus)
+        {
+            tax = (float) CalculateTax((float) bsal);
+            return salary = (decimal) (bsal + hra + bonus - tax - medical);
+        }
+
+        protected virtual decimal CalculateTax(float bsal)
+        {
+            return (decimal) (tax = 0.3f * bsal);
+        }
 
         public Employee()
         {
