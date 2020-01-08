@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactUI", "ContactUI\ContactUI.csproj", "{0933ACA6-ACE6-4D6F-9C2E-81EC2A1F7936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactLib", "ContactLib\ContactLib.csproj", "{5724C37E-57C9-4B39-A7DB-49D8C682B5D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0933ACA6-ACE6-4D6F-9C2E-81EC2A1F7936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0933ACA6-ACE6-4D6F-9C2E-81EC2A1F7936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0933ACA6-ACE6-4D6F-9C2E-81EC2A1F7936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0933ACA6-ACE6-4D6F-9C2E-81EC2A1F7936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5724C37E-57C9-4B39-A7DB-49D8C682B5D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5724C37E-57C9-4B39-A7DB-49D8C682B5D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5724C37E-57C9-4B39-A7DB-49D8C682B5D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5724C37E-57C9-4B39-A7DB-49D8C682B5D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {803636FD-D111-4439-9A44-CF8498479848}
+	EndGlobalSection
+EndGlobal
