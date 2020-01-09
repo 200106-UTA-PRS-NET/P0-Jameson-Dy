@@ -6,14 +6,33 @@ using System.Threading;
 namespace LaptopServiceLib
 {
     // create a delegate
-    public delegate void NotifyDelegate(); // delegate NotifyDel will be instantiated in the Main() -> LaptopServiceUI
+    public delegate void NotifyDelegate(); // delegate NotifyDelegate will be instantiated in the Main() -> LaptopServiceUI
     public class RepairService
     {
         public void Repair(Laptop laptop)
         {
-            Console.WriteLine("Repairing..........");
+            Console.Write("Repairing");
 
-            Thread.Sleep(3000);
+            for (int i = 0; i < 5; i++)
+            {
+                Console.Write(".");
+                Thread.Sleep(1000);
+
+            }
+            Console.WriteLine("");
+
+            // Raising Event / publishing to subscribers
+            OnRepairCompletion();
+        }
+
+        public event NotifyDelegate Repaired;
+        protected virtual void OnRepairCompletion()
+        {
+            if (Repaired != null)
+            {
+                // invoking the event which needs to be handled by delegate NotifyDelegate
+                Repaired();
+            }
         }
     }
 }
