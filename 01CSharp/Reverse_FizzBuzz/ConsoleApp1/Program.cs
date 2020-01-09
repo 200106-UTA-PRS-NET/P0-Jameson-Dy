@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ConsoleApp1
 {
+
     class Program
     {
+        const float Pi = 3.14f; // value cannot be changed
+        readonly int gavity = 4;    // value cannot be changed except in constructor
+
         static void Main(string[] args)
         {
             string userInput;
@@ -20,6 +26,35 @@ namespace ConsoleApp1
                 Console.WriteLine(FizzBuzz(userInputInt));
             }
             while (userInputInt != 0);
+            
+            // 2d array
+            int[,] twoDArray = new int[3, 4];   // 3 x 4 array
+
+            // Jagged array - array within an array
+            int[][] jaggedArray = new int[3][]; // initialize rows first
+            // initialize columns for each row
+            jaggedArray[0] = new int[3] { 1, 2, 3};
+            jaggedArray[1] = new int[2] { 6, 4 };
+
+            // loop through the rows
+            for (int i = 0; i < jaggedArray.Length; i++)
+            {
+                // loop through the columns
+                for (int j = 0; j < jaggedArray[i].Length; j++)
+                {
+                    Console.WriteLine(jaggedArray[i][j]);
+                }
+            }
+
+            //Dictionary
+            Dictionary<int, string> books = new Dictionary<int, string>();
+            books.Add(23, "How to Read");
+            books.Add(43, "Books for sale");
+
+            foreach (var bookKey in books.Keys)
+            {
+                Console.WriteLine($"{bookKey}  {books[bookKey]}");
+            }
 
         }
 
