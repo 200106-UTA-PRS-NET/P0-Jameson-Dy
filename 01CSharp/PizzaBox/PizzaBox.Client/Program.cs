@@ -32,9 +32,28 @@ namespace PizzaBox.Client
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
 
+            var userInput = "";
             store.Greetings();
-            Console.WriteLine($"----------{store.name} ({user.userName})----------");
+            do
+            {
+                Console.WriteLine($"----------{store.name} ({user.userName})----------");
+                Console.WriteLine("m:\t Menu");
+                Console.WriteLine("c:\t CustomPizza");
+                Console.WriteLine("s:\t SignOut");
+                Console.WriteLine("q:\t Quit");
+                Console.Write("\nInput: ");
+                userInput = Console.ReadLine();
 
+                if (userInput == "s")
+                {
+
+                }
+                if (userInput == "q")
+                {
+                    return;                    
+                }
+            }
+            while (userInput != "m" && userInput != "c" && userInput != "s" && userInput != "q");
 
         }
 
@@ -49,7 +68,7 @@ namespace PizzaBox.Client
             do
             {
                 Console.WriteLine($"\n----------Store Selection ({user.userName})----------");
-                Console.WriteLine($"Enter store id or \n'b' to go back to UserMenu \n'q' to Quit\n");
+                Console.WriteLine($"'b' to go back to UserMenu \n'q' to Quit\n");
                 Console.WriteLine($"{"StoreID",-20}StoreName");
                 Console.WriteLine("".PadLeft(40, '-'));
                 foreach (PizzaStore p in stores)
@@ -96,7 +115,7 @@ namespace PizzaBox.Client
             do
             {
                 Console.WriteLine($"----------User Menu ({user.userName})----------");
-                Console.WriteLine("o:\t OrderPizza");
+                Console.WriteLine("g:\t GoToPizzaStore");
                 Console.WriteLine("h:\t ViewOrderHistory");
                 Console.WriteLine("i:\t ViewUserInfo");
                 Console.WriteLine("e:\t EditUserInfo");
@@ -105,20 +124,39 @@ namespace PizzaBox.Client
                 Console.Write("\nInput: ");
                 userInput = Console.ReadLine();
 
+                switch (userInput)
+                {
+                    case "s":
+                        SignOut();
+                        break;
+                    case "g":
+                        StoreSelectMenu();
+                        break;
+                    case "h":
+                        //TODO: view order history
+                        break;
+                    case "i":
+                        //TODO: view user info
+                        break;
+                    case "e":
+                        break;
+                }
+
+            } while (userInput != "q");
+
+/*
                 if (userInput == "s")
                 {
                     // signout
-                    AccountManager.Instance.SignOut();
-                    MainMenu();
+                    SignOut();
                     break;
-                } else if (userInput == "o") 
+                } else if (userInput == "g") 
                 {
                     StoreSelectMenu();
                     break;
 
                 } else if (userInput == "h")
                 {
-                    //TODO: view order history
                 } else if (userInput == "i")
                 {
                     //TODO: view user info
@@ -128,8 +166,14 @@ namespace PizzaBox.Client
                 }
 
             } while (userInput != "q");
+            */
         }
 
+        static void SignOut()
+        {
+            AccountManager.Instance.SignOut();
+            MainMenu();
+        }
 
         static void MainMenu()
         {

@@ -5,7 +5,7 @@ using System.Text;
 namespace PizzaBox.Domain.Models
 {
 
-    class Pizza
+    public class Pizza
     {
     }
 }
