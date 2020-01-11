@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace PassByReference
 {
@@ -6,17 +7,21 @@ namespace PassByReference
     {
         static void Main(string[] args)
         {
-            string s = "a";
 
-            Console.WriteLine(aaa(s));
+            CEOSingleton.Instance.setName("James");
 
-            Console.WriteLine(s);
+            Thread t = new Thread(printName);
+            t.Start();
+
+            Console.WriteLine(CEOSingleton.Instance.getName());
+
+
         }
 
-        public static string aaa(string s)
+        static void printName()
         {
-            s += "b";
-            return s;
+            CEOSingleton.Instance.setName("Fred");
+            Console.WriteLine(CEOSingleton.Instance.getName());
         }
     }
 }
