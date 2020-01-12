@@ -129,9 +129,6 @@ namespace PizzaBox.Client
 
                 switch (userInput)
                 {
-                    case "s":
-                        SignOut();
-                        break;
                     case "g":
                         StoreSelectMenu();
                         break;
@@ -142,6 +139,13 @@ namespace PizzaBox.Client
                         //TODO: view user info
                         break;
                     case "e":
+                        //TODO: edit user info
+                        break;
+                    case "s":
+                        SignOut();
+                        break;
+                    case "q":
+                        Environment.Exit(-1);
                         break;
                 }
 
@@ -157,71 +161,69 @@ namespace PizzaBox.Client
         static void MainMenu()
         {
             var userInput = "";
+            OptionsGenerator mainMenuOptions = new OptionsGenerator();
+            mainMenuOptions.Add('s', "Signin");
+            mainMenuOptions.Add('r', "Register");
+            mainMenuOptions.Add('l', "ListUsers");
+            mainMenuOptions.Add('q', "Quit");
+
             do
             {
                 Console.WriteLine("\n----------Main Menu----------");
-                Console.WriteLine("Must have an account to order:");
-                Console.WriteLine("s:\t Signin");
-                Console.WriteLine("r:\t Register");
-                Console.WriteLine("l:\t ListUsers");
-                Console.WriteLine("q:\t Quit");
+                mainMenuOptions.DisplayOptions();
                 Console.Write("\nInput: ");
                 userInput = Console.ReadLine();
 
-                if (userInput == "s")
+                switch (userInput)
                 {
-                    // signin option
-                    string usernameInput;
-                    string passwordInput;
+                    case "s":
+                        // signin option
+                        string usernameInput;
+                        string passwordInput;
 
-                    Console.WriteLine("\n----------Sign In----------");
+                        Console.WriteLine("\n----------Sign In----------");
 
-                    Console.Write("Username: ");
-                    usernameInput = Console.ReadLine();
-                    Console.Write("Password: ");
-                    passwordInput = Console.ReadLine();
+                        Console.Write("Username: ");
+                        usernameInput = Console.ReadLine();
+                        Console.Write("Password: ");
+                        passwordInput = Console.ReadLine();
 
-                    //validate username and password         
-                    if (AccountManager.Instance.SignIn(usernameInput, passwordInput))
-                    {
-                        UserMenu();
+                        //validate username and password         
+                        if (AccountManager.Instance.SignIn(usernameInput, passwordInput))
+                        {
+                            UserMenu();
+                        }
                         break;
-                    }
+                    case "r":
+                        // register option
+                        Console.WriteLine("\n----------Creating Account----------");
+                        Console.WriteLine("Username and Password must be between 8 - 15 characters\n");
 
-                }
-                else if (userInput == "r")
-                {
-                    // register option
-                    string usernameInput;
-                    string passwordInput;
-                    Console.WriteLine("\n----------Creating Account----------");
-                    Console.WriteLine("Username and Password must be between 8 - 15 characters\n");
+                        Console.Write("Username: ");
+                        usernameInput = Console.ReadLine();
+                        Console.Write("Password: ");
+                        passwordInput = Console.ReadLine();
 
-                    Console.Write("Username: ");
-                    usernameInput = Console.ReadLine();
-                    Console.Write("Password: ");
-                    passwordInput = Console.ReadLine();
+                        bool isCreateSuccess = AccountManager.Instance.CreateUser(usernameInput, passwordInput);
+                        if (isCreateSuccess)
+                        {
+                            Console.WriteLine("Account successfully created");
 
-                    bool isCreateSuccess = AccountManager.Instance.CreateUser(usernameInput, passwordInput);
-                    if (isCreateSuccess)
-                    {
-                        Console.WriteLine("Account successfully created");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Creating account failed");
+                        }
+                        break;
+                    case "l":
+                        AccountManager.Instance.ListUsers();
+                        break;
+                    case "q":
+                        Environment.Exit(-1);
+                        break;
 
-                    } else
-                    {
-                        Console.WriteLine("Creating account failed");
-                    }
-                } else if (userInput == "l")
-                {
-                    AccountManager.Instance.ListUsers();
-                }
-                else if (userInput == "q")
-                {
-                    return;
                 }
             } while (userInput != "q");
         }
-
-
     }
 }
