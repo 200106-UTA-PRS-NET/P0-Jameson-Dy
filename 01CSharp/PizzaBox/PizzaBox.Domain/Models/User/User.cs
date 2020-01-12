@@ -8,7 +8,7 @@ namespace PizzaBox.Domain
     {
         private string name;
         public int id { get; set; }
-        private List<Order> orderHistory;
+        private List<Order> orderHistory = new List<Order>();
         public string userName { get; set; }
         public string password { get; set; }
 
@@ -20,5 +20,14 @@ namespace PizzaBox.Domain
             this.id = id;
         }
 
+        public void AddOrder(Order order)
+        {
+            orderHistory.Add(order);
+        }
+
+        public List<Order> GetOrderHistory()
+        {
+            return orderHistory;
+        }
     }
 }

@@ -21,15 +21,23 @@ namespace PizzaBox.Domain.Models
             }
         }
 
-        public void setCurrPizza(Pizza p)
+        public void SetCurrPizza(Pizza p)
         {
             selectedPizza = p;
         }
-        public Pizza getCurrPizza()
+        public Pizza GetCurrPizza()
         {
             return selectedPizza;
         }
 
+        public void SubmitOrder(Order order)
+        {
+            User user = AccountManager.Instance.GetCurrUser();
+            user.AddOrder(order);
+
+            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            store.AddOrder(order);
+        }
 
     }
 }

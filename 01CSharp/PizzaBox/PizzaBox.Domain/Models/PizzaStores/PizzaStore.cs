@@ -11,7 +11,7 @@ namespace PizzaBox.Domain.Models
         private Dictionary<int, Pizza> pizzas = new Dictionary<int, Pizza>();
 
         private Pizza currPizza;
-        private List<Order> completedOrders;
+        private List<Order> completedOrders = new List<Order>();
         private Order currOrder;
 
         public virtual void Greetings() 
@@ -36,6 +36,11 @@ namespace PizzaBox.Domain.Models
         public void AddPizza(Pizza p)
         {
             pizzas.Add(p.id, p);
+        }
+
+        public void AddOrder(Order o)
+        {
+            completedOrders.Add(o);
         }
     }
 }

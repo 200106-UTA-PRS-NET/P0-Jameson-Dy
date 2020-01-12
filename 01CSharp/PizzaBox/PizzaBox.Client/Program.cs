@@ -51,7 +51,7 @@ namespace PizzaBox.Client
         {
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
-            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+            Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
             OptionsGenerator pizzaOrderOptions = new OptionsGenerator();
             pizzaOrderOptions.Add("Type:", currPizza.name, currPizza.origPrice);
@@ -87,8 +87,13 @@ namespace PizzaBox.Client
                 {
                     case "c":
                         //TODO Confirm order
+                        List<Pizza> list = new List<Pizza>();
+                        list.Add(currPizza);
+                        Order order = new Order(list, user.id, currPizza.totalPrice, user.userName);
+                        OrderManager.Instance.SubmitOrder(order);
                         // add order to user order list
                         // add order to store order list
+                        
                         break;
                     case "e":
                         //TODO edit order
@@ -111,7 +116,7 @@ namespace PizzaBox.Client
             OptionsGenerator pizzasMenu = new OptionsGenerator();
             List<Pizza> pizzaList = store.GetPizzaList();
             List<int> pizzaIDList = store.GetPizzaIDList();
-            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+            Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
             OptionsGenerator extraMenu = new OptionsGenerator();
             extraMenu.Add("b", "Back to Pizza Selection Menu");
@@ -140,7 +145,7 @@ namespace PizzaBox.Client
                 {
                     // select regular 
                     currPizza.SetCrust(Pizza.Crust.Regular);
-                    OrderManager.Instance.setCurrPizza(currPizza);
+                    OrderManager.Instance.SetCurrPizza(currPizza);
                     ViewOrderMenu();
                     break;
                 }
@@ -148,7 +153,7 @@ namespace PizzaBox.Client
                 {
                     // select thin
                     currPizza.SetCrust(Pizza.Crust.Thin);
-                    OrderManager.Instance.setCurrPizza(currPizza);
+                    OrderManager.Instance.SetCurrPizza(currPizza);
                     ViewOrderMenu();
                     break;
                 }
@@ -156,7 +161,7 @@ namespace PizzaBox.Client
                 {
                     // select cheesy
                     currPizza.SetCrust(Pizza.Crust.Cheesy);
-                    OrderManager.Instance.setCurrPizza(currPizza);
+                    OrderManager.Instance.SetCurrPizza(currPizza);
                     ViewOrderMenu();
                     break;
                 }
@@ -181,7 +186,7 @@ namespace PizzaBox.Client
             OptionsGenerator pizzasMenu = new OptionsGenerator();
             List<Pizza> pizzaList = store.GetPizzaList();
             List<int> pizzaIDList = store.GetPizzaIDList();
-            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+            Pizza currPizza = OrderManager.Instance.GetCurrPizza();
            
             OptionsGenerator extraMenu = new OptionsGenerator();
             extraMenu.Add("b", "Back to Pizza Selection Menu");
@@ -210,14 +215,14 @@ namespace PizzaBox.Client
                 {
                     // select small 
                     currPizza.SetSize(Pizza.Size.Small);
-                    OrderManager.Instance.setCurrPizza(currPizza);
+                    OrderManager.Instance.SetCurrPizza(currPizza);
                     CrustTypeMenu();
                     break;
                 } else if (userInput == "m")
                 {
                     // select medium
                     currPizza.SetSize(Pizza.Size.Medium);
-                    OrderManager.Instance.setCurrPizza(currPizza);
+                    OrderManager.Instance.SetCurrPizza(currPizza);
                     CrustTypeMenu();
                     break;
 
@@ -226,7 +231,7 @@ namespace PizzaBox.Client
                 {
                     // select large
                     currPizza.SetSize(Pizza.Size.Large);
-                    OrderManager.Instance.setCurrPizza(currPizza);
+                    OrderManager.Instance.SetCurrPizza(currPizza);
                     CrustTypeMenu();
                     break;
 
@@ -234,7 +239,7 @@ namespace PizzaBox.Client
                 else if (userInput == "b")
                 {
                     currPizza.SetSize(Pizza.Size.Medium);
-                    OrderManager.Instance.setCurrPizza(currPizza);
+                    OrderManager.Instance.SetCurrPizza(currPizza);
                     PizzaSelectMenu();
                     break;
                 } else if (userInput == "q")
@@ -251,7 +256,7 @@ namespace PizzaBox.Client
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
             OptionsGenerator pizzasMenu = new OptionsGenerator();
-            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+            Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
             List<Pizza> pizzaList = store.GetPizzaList();
             List<int> pizzaIDList = store.GetPizzaIDList();
@@ -284,7 +289,7 @@ namespace PizzaBox.Client
                     if (pizzaIDList.Contains(pizzaID))
                     {
                         // select pizza
-                        OrderManager.Instance.setCurrPizza(store.GetPizzaByID(pizzaID));
+                        OrderManager.Instance.SetCurrPizza(store.GetPizzaByID(pizzaID));
                         PizzaSizeMenu();
                         break;
                     }
@@ -306,7 +311,7 @@ namespace PizzaBox.Client
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
             OptionsGenerator storeMenu = new OptionsGenerator();
-            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+            Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
             storeMenu.Add("a", "Add from PizzaMenu");
             storeMenu.Add("c", "CustomPizza");
@@ -439,7 +444,16 @@ namespace PizzaBox.Client
                         StoreSelectMenu();
                         break;
                     case "h":
-                        //TODO: view order history
+                        //TODO: view order history menu
+                        List<Order> orders = user.GetOrderHistory();
+                        if (orders.Count > 0)
+                        {
+                            Order firstOrder = orders[0];
+                            firstOrder.DisplayOrder();
+                        } else
+                        {
+                            Console.WriteLine("No orders");
+                        }
                         break;
                     case "i":
                         //TODO: view user info
