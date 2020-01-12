@@ -20,8 +20,12 @@ namespace PizzaBox.Client
             PizzaStore pizahat = new PizzaStore();
             pizahat.name = "Pizahat";
             pizahat.id = 1;
-
             PizzaStoreManager.Instance.AddStore(pizahat);
+
+            PizzaStore mamajohn = new PizzaStore();
+            mamajohn.name = "Mama Johns";
+            mamajohn.id = 2;
+            PizzaStoreManager.Instance.AddStore(mamajohn);
 
             MainMenu();
 
@@ -31,29 +35,43 @@ namespace PizzaBox.Client
         {
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            OptionsGenerator storeMenu = new OptionsGenerator();
+            storeMenu.Add("m", "Menu");
+            storeMenu.Add("c", "CustomPizza");
+            storeMenu.Add("b", "Back to Store Selection");
+            storeMenu.Add("s", "SignOut");
+            storeMenu.Add("q", "Quit");
+
 
             var userInput = "";
             store.Greetings();
             do
             {
                 Console.WriteLine($"----------{store.name} ({user.userName})----------");
-                Console.WriteLine("m:\t Menu");
-                Console.WriteLine("c:\t CustomPizza");
-                Console.WriteLine("s:\t SignOut");
-                Console.WriteLine("q:\t Quit");
+                storeMenu.DisplayOptions();
                 Console.Write("\nInput: ");
                 userInput = Console.ReadLine();
-
-                if (userInput == "s")
+                
+                switch(userInput)
                 {
-
-                }
-                if (userInput == "q")
-                {
-                    return;                    
+                    case "m":
+                        //TODO open menu
+                        break;
+                    case "c":
+                        //TODO custom pizza
+                        break;
+                    case "b":
+                        StoreSelectMenu();
+                        break;
+                    case "s":
+                        SignOut();
+                        break;
+                    case "q":
+                        Environment.Exit(-1);
+                        break;
                 }
             }
-            while (userInput != "m" && userInput != "c" && userInput != "s" && userInput != "q");
+            while (userInput != "q");
 
         }
 
@@ -65,17 +83,21 @@ namespace PizzaBox.Client
             List<PizzaStore> stores = PizzaStoreManager.Instance.GetStoreList();
             List<int> storeIDs = PizzaStoreManager.Instance.GetStoreIDList();
 
+            OptionsGenerator storeSelectMenu = new OptionsGenerator();
+            storeSelectMenu.Add("b", "Back to UserMenu");
+            storeSelectMenu.Add("q", "Quit");
+            foreach (PizzaStore p in stores)
+            {
+                storeSelectMenu.Add(p.id.ToString(),p.name);
+                Console.WriteLine(p.name);
+            }
+
             do
             {
                 Console.WriteLine($"\n----------Store Selection ({user.userName})----------");
-                Console.WriteLine($"'b' to go back to UserMenu \n'q' to Quit\n");
-                Console.WriteLine($"{"StoreID",-20}StoreName");
+                Console.WriteLine($"{"Code"}\t\tStoreName");
                 Console.WriteLine("".PadLeft(40, '-'));
-                foreach (PizzaStore p in stores)
-                {
-                    Console.WriteLine($"{p.id,-20}{p.name}");
-                }
-
+                storeSelectMenu.DisplayOptions();
                 Console.Write("\nInput: ");
                 userInput = Console.ReadLine();
 
@@ -98,6 +120,7 @@ namespace PizzaBox.Client
                 }
                 else if (userInput == "q")
                 {
+                    Environment.Exit(-1);
                     return;
                 }
             } 
@@ -113,12 +136,12 @@ namespace PizzaBox.Client
             User user = AccountManager.Instance.GetCurrUser();
 
             OptionsGenerator userMenuOptions = new OptionsGenerator();
-            userMenuOptions.Add('g', "GoToPizzaStore");
-            userMenuOptions.Add('h', "ViewOrderHistory");
-            userMenuOptions.Add('i', "ViewUserInfo");
-            userMenuOptions.Add('e', "EditUserInfo");
-            userMenuOptions.Add('s', "SignOut");
-            userMenuOptions.Add('q', "Quit");
+            userMenuOptions.Add("g", "GoToPizzaStore");
+            userMenuOptions.Add("h", "ViewOrderHistory");
+            userMenuOptions.Add("i", "ViewUserInfo");
+            userMenuOptions.Add("e", "EditUserInfo");
+            userMenuOptions.Add("s", "SignOut");
+            userMenuOptions.Add("q", "Quit");
 
             do
             {
@@ -162,10 +185,10 @@ namespace PizzaBox.Client
         {
             var userInput = "";
             OptionsGenerator mainMenuOptions = new OptionsGenerator();
-            mainMenuOptions.Add('s', "Signin");
-            mainMenuOptions.Add('r', "Register");
-            mainMenuOptions.Add('l', "ListUsers");
-            mainMenuOptions.Add('q', "Quit");
+            mainMenuOptions.Add("s", "Signin");
+            mainMenuOptions.Add("r", "Register");
+            mainMenuOptions.Add("l", "ListUsers");
+            mainMenuOptions.Add("q", "Quit");
 
             do
             {

@@ -6,15 +6,15 @@ namespace PizzaBox.Domain.Models
 {
     public class OptionsGenerator
     {
-        private Dictionary<char, string> options;
+        private Dictionary<string, string> options;
 
         public OptionsGenerator() 
         {
-            options = new Dictionary<char, string>();
+            options = new Dictionary<string, string>();
         }
-        public OptionsGenerator(List<char> symbols, List<string> descriptions )
+        public OptionsGenerator(List<string> symbols, List<string> descriptions )
         {
-            options = new Dictionary<char, string>();
+            options = new Dictionary<string, string>();
 
             for (int i = 0; i < symbols.Count; i++)
             {
@@ -22,21 +22,30 @@ namespace PizzaBox.Domain.Models
             }
         }
 
-        public Dictionary<char, string> GetOptions()
+        public Dictionary<string, string> GetOptions()
         {
             return options;
         }
 
-        public void Add(char c, string description)
+        public void Add(string c, string description)
         {
             options.Add(c, description);
+        }
+
+        public void DisplayOptions(int gapSize)
+        {
+            foreach (var o in options)
+            {
+                Console.WriteLine($"{o.Key}".PadLeft(gapSize, '-') + "A");
+
+            }
         }
 
         public void DisplayOptions()
         {
             foreach (var o in options)
             {
-                Console.WriteLine($"{o.Key}:\t{o.Value}");
+                Console.WriteLine($"{o.Key}:\t\t{o.Value}");
             }
         }
 
