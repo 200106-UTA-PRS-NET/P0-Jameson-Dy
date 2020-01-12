@@ -42,7 +42,7 @@ namespace PizzaBox.Domain.Models
         {
             if (store != null)
             {
-                stores.Add(store.id, store);
+                stores.Add(store.storeID, store);
                 return true;
             }
             else

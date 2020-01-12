@@ -19,12 +19,12 @@ namespace PizzaBox.Client
             // test stores
             PizzaStore pizahat = new PizzaStore();
             pizahat.name = "Pizahat";
-            pizahat.id = 1;
+            pizahat.storeID = 1;
             PizzaStoreManager.Instance.AddStore(pizahat);
 
             PizzaStore mamajohn = new PizzaStore();
             mamajohn.name = "Mama Johns";
-            mamajohn.id = 2;
+            mamajohn.storeID = 2;
             PizzaStoreManager.Instance.AddStore(mamajohn);
 
             // test pizzas
@@ -42,14 +42,20 @@ namespace PizzaBox.Client
 
         }
 
-        private static void AddPizzaMenu(Pizza pizza)
+        static void DashPaddings(int size)
+        {
+            Console.WriteLine("".PadLeft(size, '-'));
+        }
+        private static void PizzaOrderMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
             OptionsGenerator pizzasMenu = new OptionsGenerator();
             List<Pizza> pizzaList = store.GetPizzaList();
             List<int> pizzaIDList = store.GetPizzaIDList();
+            Pizza currPizza = OrderManager.Instance.getCurrPizza();
 
+            
             OptionsGenerator extraMenu = new OptionsGenerator();
             extraMenu.Add("b", "Back to PizzaMenu");
             extraMenu.Add("q", "Quit");
@@ -57,8 +63,28 @@ namespace PizzaBox.Client
             var userInput = "";
             do
             {
-                Console.WriteLine($"\n----------Pizza Type: ({pizza.name}) ({user.userName})----------");
-                if (userInput == "b")
+                Console.WriteLine($"\n----------Pizza Size: ({currPizza.name}) ({user.userName})----------");
+                Console.WriteLine("Code".PadRight(10) + "Size".PadRight(10) + "Price");
+                DashPaddings(60);
+
+                Console.WriteLine("s".PadRight(10) + "8 in".PadRight(10) + $"$ {currPizza.price - 3f}");
+                Console.WriteLine("m".PadRight(10) + "12 in".PadRight(10) + $"$ {currPizza.price}");
+                Console.WriteLine("l".PadRight(10) + "16 in".PadRight(10) + $"$ {currPizza.price + 3f}");
+                DashPaddings(60);
+
+                Console.Write("Input: ");
+                userInput = Console.ReadLine();
+                if (userInput == "s")
+                {
+                    // select small 
+                    break;
+                } else if (userInput == "m")
+                {
+                    // select medium
+                } else if (userInput == "l")
+                {
+                    // select large
+                } else if (userInput == "b")
                 {
                     PizzasMenu();
                     break;
@@ -92,12 +118,13 @@ namespace PizzaBox.Client
             do
             {
                 Console.WriteLine($"\n----------Pizza Selection ({store.name}) ({user.userName})----------");
-                Console.WriteLine("Code".PadRight(10)+"Pizza Type".PadRight(30) +"Price");
-                Console.WriteLine("".PadLeft(60, '-'));
+                Console.WriteLine("Code".PadRight(10)+"Pizza Type".PadRight(30) +"Price(Regular Size)");
+                DashPaddings(60);
                 pizzasMenu.DisplayOptions(1);
-                Console.WriteLine("".PadLeft(60, '-'));
+                DashPaddings(60);
                 extraMenu.DisplayOptions();
-                Console.Write("\nInput: ");
+                DashPaddings(60);
+                Console.Write("Input: ");
                 userInput = Console.ReadLine();
 
                 if (int.TryParse(userInput, out int pizzaID))
@@ -106,7 +133,8 @@ namespace PizzaBox.Client
                     if (pizzaIDList.Contains(pizzaID))
                     {
                         // select pizza
-                        AddPizzaMenu(pizzaID);
+                        OrderManager.Instance.setCurrPizza(store.GetPizzaByID(pizzaID));
+                        PizzaOrderMenu();
                         break;
                     }
                 } else if (userInput == "b")
@@ -146,7 +174,8 @@ namespace PizzaBox.Client
             {
                 Console.WriteLine($"----------{store.name} ({user.userName})----------");
                 storeMenu.DisplayOptions();
-                Console.Write("\nInput: ");
+                DashPaddings(60);
+                Console.Write("Input: ");
                 userInput = Console.ReadLine();
                 
                 switch(userInput)
@@ -188,21 +217,22 @@ namespace PizzaBox.Client
             extraMenu.Add("q", "Quit");
 
             OptionsGenerator storeSelectMenu = new OptionsGenerator();
-            foreach (PizzaStore p in stores)
+            foreach (PizzaStore store in stores)
             {
-                storeSelectMenu.Add(p.id.ToString(),p.name);
-                Console.WriteLine(p.name);
+                storeSelectMenu.Add(store.storeID.ToString(), store.name);
+                Console.WriteLine(store.name);
             }
 
             do
             {
                 Console.WriteLine($"\n----------Store Selection ({user.userName})----------");
                 Console.WriteLine("Code".PadRight(10) + "StoreName");
-                Console.WriteLine("".PadLeft(60, '-'));
+                DashPaddings(60);
                 storeSelectMenu.DisplayOptions();
-                Console.WriteLine("".PadLeft(60, '-'));
+                DashPaddings(60);
                 extraMenu.DisplayOptions();
-                Console.Write("\nInput: ");
+                DashPaddings(60);
+                Console.Write("Input: ");
                 userInput = Console.ReadLine();
 
                 if (int.TryParse(userInput, out int storeID))
@@ -251,7 +281,8 @@ namespace PizzaBox.Client
             {
                 Console.WriteLine($"----------User Menu ({user.userName})----------");
                 userMenuOptions.DisplayOptions();
-                Console.Write("\nInput: ");
+                DashPaddings(60);
+                Console.Write("Input: ");
                 userInput = Console.ReadLine();
 
                 switch (userInput)
@@ -298,7 +329,8 @@ namespace PizzaBox.Client
             {
                 Console.WriteLine("\n----------Main Menu----------");
                 mainMenuOptions.DisplayOptions();
-                Console.Write("\nInput: ");
+                DashPaddings(60);
+                Console.Write("Input: ");
                 userInput = Console.ReadLine();
 
                 switch (userInput)

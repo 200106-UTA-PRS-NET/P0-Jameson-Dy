@@ -8,10 +8,28 @@ namespace PizzaBox.Domain.Models
     {
         private static readonly OrderManager instance = new OrderManager();
         private static Order currOrder = new Order();
+        private static Pizza selectedPizza = new Pizza();
 
         static OrderManager() { }
         private OrderManager() { }
-        
+
+        public static OrderManager Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        public void setCurrPizza(Pizza p)
+        {
+            selectedPizza = p;
+        }
+        public Pizza getCurrPizza()
+        {
+            return selectedPizza;
+        }
+
 
     }
 }
