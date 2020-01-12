@@ -61,8 +61,8 @@ namespace PizzaBox.Domain.Models
                     foreach (var o in options)
                     {
                         //Console.WriteLine($"{o.Key}:\t\t{o.Value}\t\t\t{prices[i]}");
-                        Console.Write($"{o.Key}".PadRight(10));
-                        Console.Write($"{o.Value}".PadRight(30));
+                        Console.Write($"{o.Key}".PadRight(12));
+                        Console.Write($"{o.Value}".PadRight(20));
                         Console.Write($"$ {prices[i].ToString("###0.00")}\n");
 
                         i++;
@@ -80,7 +80,7 @@ namespace PizzaBox.Domain.Models
         {
             foreach (var o in options)
             {
-                Console.WriteLine($"{o.Key}:".PadRight(10)+$"{o.Value}");
+                Console.WriteLine($"{o.Key}:".PadRight(12)+$"{o.Value}");
             }
         }
 
