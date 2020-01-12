@@ -37,9 +37,10 @@ namespace PizzaBox.Domain.Models
             this.id = id;
             this.name = name;
             origPrice = 8f;
-            totalPrice = origPrice;
             crust = Crust.Regular;
             size = Size.Medium;
+            totalPrice = origPrice + (float)size + (float)crust;
+
         }
 
         public Pizza(int id, string name, float price = 8f)
@@ -47,11 +48,12 @@ namespace PizzaBox.Domain.Models
             this.id = id;
             this.name = name;
             origPrice = price;
-            totalPrice = origPrice;
             crust = Crust.Regular;
             size = Size.Medium;
+            totalPrice = origPrice + (float)size + (float)crust;
+
         }
-        
+
         public float SetSize(Size size)
         {
             this.size = size;
@@ -73,9 +75,9 @@ namespace PizzaBox.Domain.Models
             this.id = id;
             this.name = name;
             origPrice = price;
-            totalPrice = origPrice;
             this.crust = crust;
             this.size = size;
+            totalPrice = origPrice + (float)size + (float)crust;
         }
     }
 }
