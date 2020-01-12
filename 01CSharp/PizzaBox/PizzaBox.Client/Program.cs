@@ -112,15 +112,18 @@ namespace PizzaBox.Client
             var userInput = "";
             User user = AccountManager.Instance.GetCurrUser();
 
+            OptionsGenerator userMenuOptions = new OptionsGenerator();
+            userMenuOptions.Add('g', "GoToPizzaStore");
+            userMenuOptions.Add('h', "ViewOrderHistory");
+            userMenuOptions.Add('i', "ViewUserInfo");
+            userMenuOptions.Add('e', "EditUserInfo");
+            userMenuOptions.Add('s', "SignOut");
+            userMenuOptions.Add('q', "Quit");
+
             do
             {
                 Console.WriteLine($"----------User Menu ({user.userName})----------");
-                Console.WriteLine("g:\t GoToPizzaStore");
-                Console.WriteLine("h:\t ViewOrderHistory");
-                Console.WriteLine("i:\t ViewUserInfo");
-                Console.WriteLine("e:\t EditUserInfo");
-                Console.WriteLine("s:\t SignOut");
-                Console.WriteLine("q:\t Quit");
+                userMenuOptions.DisplayOptions();
                 Console.Write("\nInput: ");
                 userInput = Console.ReadLine();
 
@@ -143,30 +146,6 @@ namespace PizzaBox.Client
                 }
 
             } while (userInput != "q");
-
-/*
-                if (userInput == "s")
-                {
-                    // signout
-                    SignOut();
-                    break;
-                } else if (userInput == "g") 
-                {
-                    StoreSelectMenu();
-                    break;
-
-                } else if (userInput == "h")
-                {
-                } else if (userInput == "i")
-                {
-                    //TODO: view user info
-                } else if (userInput == "e")
-                {
-                    //TODO: edit user info
-                }
-
-            } while (userInput != "q");
-            */
         }
 
         static void SignOut()
