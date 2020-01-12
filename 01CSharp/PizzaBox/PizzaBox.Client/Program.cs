@@ -29,8 +29,8 @@ namespace PizzaBox.Client
 
             // test pizzas
             Pizza peperoniPizza = new Pizza(1, "Peperoni");
-            Pizza supremePizza = new Pizza(2, "Supreme", 9f);
-            Pizza waterPizza = new Pizza(3, "Water", 420f);
+            Pizza supremePizza = new Pizza(2, "Supreme", 9f, Pizza.Crust.Thin, Pizza.Size.Large);
+            Pizza waterPizza = new Pizza(3, "Water", 20f, Pizza.Crust.Cheesy, Pizza.Size.Small);
             Pizza ultimaPizza = new Pizza(4, "Ultima", 9999.50f);
 
             PizzaStoreManager.Instance.AddPizzaToStore(peperoniPizza, pizahat);
@@ -46,7 +46,38 @@ namespace PizzaBox.Client
         {
             Console.WriteLine("".PadLeft(size, '-'));
         }
-        private static void PizzaOrderMenu()
+
+        private static void ViewOrderMenu()
+        {
+            User user = AccountManager.Instance.GetCurrUser();
+            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+
+            var userInput = "";
+            do
+            {
+                Console.WriteLine($"\n----------View Order ({user.userName}) (Total = $ {currPizza.totalPrice})----------");
+                Console.WriteLine("Pizza Type:".PadRight(15) + $"{currPizza.name}".PadRight(15) + $"{currPizza.origPrice.ToString("###0.00")}");
+                Console.WriteLine("Size:".PadRight(15) + $"{currPizza.size}".PadRight(15) + $"{((float) currPizza.size).ToString("###0.00")}");
+                Console.WriteLine("Crust:".PadRight(15) + $"{currPizza.crust}".PadRight(15) + $"{((float) currPizza.crust).ToString("###0.00")}");
+
+                DashPaddings(60);
+                Console.Write("Input: ");
+                userInput = Console.ReadLine();
+
+                switch(userInput)
+                {
+                    case "b":
+                        StoreMenu();
+                        break;
+                    case "q":
+                        Environment.Exit(-1);
+                        break;
+                }
+            } while (userInput != "q");
+        }
+
+        private static void CrustTypeMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
@@ -55,21 +86,95 @@ namespace PizzaBox.Client
             List<int> pizzaIDList = store.GetPizzaIDList();
             Pizza currPizza = OrderManager.Instance.getCurrPizza();
 
-            
             OptionsGenerator extraMenu = new OptionsGenerator();
-            extraMenu.Add("b", "Back to PizzaMenu");
+            extraMenu.Add("b", "Back to Pizza Selection Menu");
             extraMenu.Add("q", "Quit");
 
             var userInput = "";
             do
             {
-                Console.WriteLine($"\n----------Pizza Size: ({currPizza.name}) ({user.userName})----------");
+                Console.WriteLine($"\n----------Pizza: ({currPizza.name}) ({currPizza.size} size) ({currPizza.crust} crust) ({user.userName}) (Total = $ {currPizza.totalPrice})----------");
+                Console.WriteLine("Code".PadRight(10) + "Crust Type".PadRight(10) + "Price");
+                DashPaddings(60);
+
+                // new pizza prices
+                float pThin = currPizza.totalPrice + (float) Pizza.Crust.Thin;
+                float pCheesy = currPizza.totalPrice + (float) Pizza.Crust.Cheesy;
+                Console.WriteLine("r".PadRight(10) + "8 in".PadRight(10) + $"$ {currPizza.totalPrice}");
+                Console.WriteLine("t".PadRight(10) + "12 in".PadRight(10) + $"$ {pThin}");
+                Console.WriteLine("c".PadRight(10) + "16 in".PadRight(10) + $"$ {pCheesy}");
+                DashPaddings(60);
+                extraMenu.DisplayOptions();
+                DashPaddings(60);
+
+                Console.Write("Input: ");
+                userInput = Console.ReadLine();
+                if (userInput == "r")
+                {
+                    // select regular 
+                    currPizza.SetCrust(Pizza.Crust.Regular);
+                    OrderManager.Instance.setCurrPizza(currPizza);
+                    ViewOrderMenu();
+                    break;
+                }
+                else if (userInput == "t")
+                {
+                    // select thin
+                    currPizza.SetCrust(Pizza.Crust.Thin);
+                    OrderManager.Instance.setCurrPizza(currPizza);
+                    ViewOrderMenu();
+                    break;
+                }
+                else if (userInput == "c")
+                {
+                    // select cheesy
+                    currPizza.SetCrust(Pizza.Crust.Cheesy);
+                    OrderManager.Instance.setCurrPizza(currPizza);
+                    ViewOrderMenu();
+                    break;
+                }
+                else if (userInput == "b")
+                {
+                    PizzaSelectMenu();
+                    break;
+                }
+                else if (userInput == "q")
+                {
+                    Environment.Exit(-1);
+                    break;
+                }
+            }
+            while (userInput != "q");
+        }
+
+        private static void PizzaSizeMenu()
+        {
+            User user = AccountManager.Instance.GetCurrUser();
+            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            OptionsGenerator pizzasMenu = new OptionsGenerator();
+            List<Pizza> pizzaList = store.GetPizzaList();
+            List<int> pizzaIDList = store.GetPizzaIDList();
+            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+           
+            OptionsGenerator extraMenu = new OptionsGenerator();
+            extraMenu.Add("b", "Back to Pizza Selection Menu");
+            extraMenu.Add("q", "Quit");
+
+            var userInput = "";
+            do
+            {
+                Console.WriteLine($"\n----------Pizza Size: ({currPizza.name}) ({currPizza.size} size) ({currPizza.crust} crust) ({user.userName}) (Total = $ {currPizza.totalPrice})----------");
                 Console.WriteLine("Code".PadRight(10) + "Size".PadRight(10) + "Price");
                 DashPaddings(60);
 
-                Console.WriteLine("s".PadRight(10) + "8 in".PadRight(10) + $"$ {currPizza.price - 3f}");
-                Console.WriteLine("m".PadRight(10) + "12 in".PadRight(10) + $"$ {currPizza.price}");
-                Console.WriteLine("l".PadRight(10) + "16 in".PadRight(10) + $"$ {currPizza.price + 3f}");
+                // new pizza prices
+                float pSmall = currPizza.totalPrice + (float) Pizza.Size.Small;
+                float pLarge = currPizza.totalPrice + (float) Pizza.Size.Large;
+                Console.WriteLine("s".PadRight(10) + "8 in".PadRight(10) + $"$ {pSmall}");
+                Console.WriteLine("m".PadRight(10) + "12 in".PadRight(10) + $"$ {currPizza.totalPrice}");
+                Console.WriteLine("l".PadRight(10) + "16 in".PadRight(10) + $"$ {pLarge}");
+                DashPaddings(60);
+                extraMenu.DisplayOptions();
                 DashPaddings(60);
 
                 Console.Write("Input: ");
@@ -77,16 +182,33 @@ namespace PizzaBox.Client
                 if (userInput == "s")
                 {
                     // select small 
+                    currPizza.SetSize(Pizza.Size.Small);
+                    OrderManager.Instance.setCurrPizza(currPizza);
+                    CrustTypeMenu();
                     break;
                 } else if (userInput == "m")
                 {
                     // select medium
-                } else if (userInput == "l")
+                    currPizza.SetSize(Pizza.Size.Medium);
+                    OrderManager.Instance.setCurrPizza(currPizza);
+                    CrustTypeMenu();
+                    break;
+
+                }
+                else if (userInput == "l")
                 {
                     // select large
-                } else if (userInput == "b")
+                    currPizza.SetSize(Pizza.Size.Large);
+                    OrderManager.Instance.setCurrPizza(currPizza);
+                    CrustTypeMenu();
+                    break;
+
+                }
+                else if (userInput == "b")
                 {
-                    PizzasMenu();
+                    currPizza.SetSize(Pizza.Size.Medium);
+                    OrderManager.Instance.setCurrPizza(currPizza);
+                    PizzaSelectMenu();
                     break;
                 } else if (userInput == "q")
                 {
@@ -97,11 +219,13 @@ namespace PizzaBox.Client
             while (userInput != "q");
         }
 
-        private static void PizzasMenu()
+        private static void PizzaSelectMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
             OptionsGenerator pizzasMenu = new OptionsGenerator();
+            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+
             List<Pizza> pizzaList = store.GetPizzaList();
             List<int> pizzaIDList = store.GetPizzaIDList();
 
@@ -111,14 +235,14 @@ namespace PizzaBox.Client
 
             foreach (Pizza p in pizzaList)
             {
-                pizzasMenu.Add(p.id.ToString(), p.name, p.price);
+                pizzasMenu.Add(p.id.ToString(), p.name, p.origPrice);
             }
 
             var userInput = "";
             do
             {
-                Console.WriteLine($"\n----------Pizza Selection ({store.name}) ({user.userName})----------");
-                Console.WriteLine("Code".PadRight(10)+"Pizza Type".PadRight(30) +"Price(Regular Size)");
+                Console.WriteLine($"\n----------Pizza Selection ({store.name}) ({user.userName}) (Total = $ {currPizza.totalPrice})----------");
+                Console.WriteLine("Code".PadRight(10)+"Pizza Type".PadRight(30) +"Price(Medium Size)");
                 DashPaddings(60);
                 pizzasMenu.DisplayOptions(1);
                 DashPaddings(60);
@@ -134,7 +258,7 @@ namespace PizzaBox.Client
                     {
                         // select pizza
                         OrderManager.Instance.setCurrPizza(store.GetPizzaByID(pizzaID));
-                        PizzaOrderMenu();
+                        PizzaSizeMenu();
                         break;
                     }
                 } else if (userInput == "b")
@@ -150,19 +274,16 @@ namespace PizzaBox.Client
             } while (userInput != "q");
         }
 
-        private static void ViewOrder()
-        {
-            //TODO
-        }
-
         private static void StoreMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
             OptionsGenerator storeMenu = new OptionsGenerator();
+            Pizza currPizza = OrderManager.Instance.getCurrPizza();
+
             storeMenu.Add("a", "Add from PizzaMenu");
             storeMenu.Add("c", "CustomPizza");
-            storeMenu.Add("p", "PreviewOrder");
+            storeMenu.Add("v", "ViewOrder");
             storeMenu.Add("b", "Back to Store Selection");
             storeMenu.Add("s", "SignOut");
             storeMenu.Add("q", "Quit");
@@ -172,7 +293,7 @@ namespace PizzaBox.Client
             store.Greetings();
             do
             {
-                Console.WriteLine($"----------{store.name} ({user.userName})----------");
+                Console.WriteLine($"----------{store.name} ({user.userName}) (Total = $ {currPizza.totalPrice})----------");
                 storeMenu.DisplayOptions();
                 DashPaddings(60);
                 Console.Write("Input: ");
@@ -181,13 +302,13 @@ namespace PizzaBox.Client
                 switch(userInput)
                 {
                     case "a":
-                        PizzasMenu();
+                        PizzaSelectMenu();
                         break;
                     case "c":
                         //TODO custom pizza
                         break;
-                    case "p":
-                        ViewOrder();
+                    case "v":
+                        ViewOrderMenu();
                         break;
                     case "b":
                         StoreSelectMenu();
@@ -220,7 +341,7 @@ namespace PizzaBox.Client
             foreach (PizzaStore store in stores)
             {
                 storeSelectMenu.Add(store.storeID.ToString(), store.name);
-                Console.WriteLine(store.name);
+                //Console.WriteLine(store.name);
             }
 
             do
