@@ -88,17 +88,28 @@ namespace PizzaBox.Domain.Models
         {
             if (IsValidUserNamePassword(username, password))
             {
-                User user = users[userIDs[username]];
-                if (user.password == password)
+
+                try
                 {
-                    Console.WriteLine("\nSign in successful");
-                    currUser = user;
-                    return true;
-                } else
+                    User user = users[userIDs[username]];
+                    if (user.password == password)
+                    {
+                        Console.WriteLine("\nSign in successful");
+                        currUser = user;
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nSign in failed :(");
+                        return false;
+                    }
+                } catch (KeyNotFoundException e)
                 {
+                    // log exception
                     Console.WriteLine("\nSign in failed :(");
                     return false;
                 }
+
             }
             else
             {
