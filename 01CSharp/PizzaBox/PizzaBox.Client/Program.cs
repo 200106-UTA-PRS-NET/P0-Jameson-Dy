@@ -16,7 +16,7 @@ namespace PizzaBox.Client
             AccountManager.Instance.CreateUser("fredfred", "fredfred");
             AccountManager.Instance.CreateUser("mcdonald", "imlovinit");
 
-            // test store
+            // test stores
             PizzaStore pizahat = new PizzaStore();
             pizahat.name = "Pizahat";
             pizahat.id = 1;
@@ -27,8 +27,61 @@ namespace PizzaBox.Client
             mamajohn.id = 2;
             PizzaStoreManager.Instance.AddStore(mamajohn);
 
+            // test pizzas
+            Pizza peperoniPizza = new Pizza(1, "Peperoni");
+            Pizza supremePizza = new Pizza(2, "Supreme", 9f);
+            Pizza waterPizza = new Pizza(3, "Water", 420f);
+            Pizza ultimaPizza = new Pizza(4, "Ultima", 9999.50f);
+
+            PizzaStoreManager.Instance.AddPizzaToStore(peperoniPizza, pizahat);
+            PizzaStoreManager.Instance.AddPizzaToStore(supremePizza, pizahat);
+            PizzaStoreManager.Instance.AddPizzaToStore(waterPizza, mamajohn);
+            PizzaStoreManager.Instance.AddPizzaToStore(ultimaPizza, mamajohn);
+
             MainMenu();
 
+        }
+
+        private static void PizzasMenu()
+        {
+            User user = AccountManager.Instance.GetCurrUser();
+            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            OptionsGenerator pizzasMenu = new OptionsGenerator();
+            List<Pizza> pizzaList = store.GetPizzaList();
+            List<int> pizzaIDList = store.GetPizzaIDList();
+
+            OptionsGenerator extraMenu = new OptionsGenerator();
+            extraMenu.Add("b", "Back to StoreMenu");
+            extraMenu.Add("q", "Quit");
+
+            foreach (Pizza p in pizzaList)
+            {
+                pizzasMenu.Add(p.id.ToString(), p.name, p.price);
+            }
+
+            var userInput = "";
+            do
+            {
+                Console.WriteLine($"\n----------Pizza Selection ({store.name}) ({user.userName})----------");
+                Console.WriteLine("Code".PadRight(10)+"Pizza Type".PadRight(30) +"Price");
+                Console.WriteLine("".PadLeft(60, '-'));
+                pizzasMenu.DisplayOptions(1);
+                Console.WriteLine("".PadLeft(60, '-'));
+                extraMenu.DisplayOptions();
+                Console.Write("\nInput: ");
+                userInput = Console.ReadLine();
+
+                if (int.TryParse(userInput, out int pizzaID))
+                {
+                    // numeric input
+                    if (pizzaIDList.Contains(pizzaID))
+                    {
+                        break;
+
+                    }
+                }
+
+            } while (userInput != "q");
         }
 
         private static void StoreMenu()
@@ -55,7 +108,7 @@ namespace PizzaBox.Client
                 switch(userInput)
                 {
                     case "m":
-                        //TODO open menu
+                        PizzasMenu();
                         break;
                     case "c":
                         //TODO custom pizza
@@ -83,9 +136,11 @@ namespace PizzaBox.Client
             List<PizzaStore> stores = PizzaStoreManager.Instance.GetStoreList();
             List<int> storeIDs = PizzaStoreManager.Instance.GetStoreIDList();
 
+            OptionsGenerator extraMenu = new OptionsGenerator();
+            extraMenu.Add("b", "Back to UserMenu");
+            extraMenu.Add("q", "Quit");
+
             OptionsGenerator storeSelectMenu = new OptionsGenerator();
-            storeSelectMenu.Add("b", "Back to UserMenu");
-            storeSelectMenu.Add("q", "Quit");
             foreach (PizzaStore p in stores)
             {
                 storeSelectMenu.Add(p.id.ToString(),p.name);
@@ -95,9 +150,11 @@ namespace PizzaBox.Client
             do
             {
                 Console.WriteLine($"\n----------Store Selection ({user.userName})----------");
-                Console.WriteLine($"{"Code"}\t\tStoreName");
-                Console.WriteLine("".PadLeft(40, '-'));
+                Console.WriteLine("Code".PadRight(10) + "StoreName");
+                Console.WriteLine("".PadLeft(60, '-'));
                 storeSelectMenu.DisplayOptions();
+                Console.WriteLine("".PadLeft(60, '-'));
+                extraMenu.DisplayOptions();
                 Console.Write("\nInput: ");
                 userInput = Console.ReadLine();
 

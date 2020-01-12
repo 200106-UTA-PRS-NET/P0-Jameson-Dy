@@ -7,6 +7,8 @@ namespace PizzaBox.Domain.Models
     public class Order
     {
         private long id;
+        private string customerName;
+        private float totalPrice;
 
     }
 }

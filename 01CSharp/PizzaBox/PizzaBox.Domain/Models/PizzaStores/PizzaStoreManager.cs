@@ -60,5 +60,10 @@ namespace PizzaBox.Domain.Models
         {
             currStore = stores[storeID];
         }
+
+        public void AddPizzaToStore(Pizza p, PizzaStore store)
+        {
+            store.AddPizza(p);
+        }
     }
 }

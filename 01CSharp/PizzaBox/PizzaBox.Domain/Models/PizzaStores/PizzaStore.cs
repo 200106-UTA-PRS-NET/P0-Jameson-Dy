@@ -8,7 +8,8 @@ namespace PizzaBox.Domain.Models
     {
         public string name { get; set; }
         public int id { get; set; }
-        private List<Pizza> pizzas;
+        private Dictionary<int, Pizza> pizzas = new Dictionary<int, Pizza>();
+
         private Pizza currPizza;
         private List<Order> completedOrders;
         private Order currOrder;
@@ -20,7 +21,16 @@ namespace PizzaBox.Domain.Models
 
         public List<Pizza> GetPizzaList()
         {
-            return pizzas;
+            return new List<Pizza>(pizzas.Values);
+        }
+        public List<int> GetPizzaIDList()
+        {
+            return new List<int>(pizzas.Keys);
+        }
+
+        public void AddPizza(Pizza p)
+        {
+            pizzas.Add(p.id, p);
         }
     }
 }
