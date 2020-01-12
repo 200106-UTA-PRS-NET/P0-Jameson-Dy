@@ -11,6 +11,9 @@ namespace PizzaBox.Domain.Models
         public string name { get; set; }
         public float price { get; set; }
 
+        private string crust;
+        private int size;
+
         public Pizza() { }
         public Pizza(int id, string name )
         {
