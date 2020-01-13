@@ -47,7 +47,53 @@ namespace PizzaBox.Client
             Console.WriteLine("".PadLeft(size, '-'));
         }
 
-        private static void ViewOrderMenu()
+        static void ViewOrderMenu()
+        {
+            User user = AccountManager.Instance.GetCurrUser();
+            OptionsGenerator pizzaOrderOptions = new OptionsGenerator();
+            Pizza currPizza = OrderManager.Instance.GetCurrPizza();
+
+            pizzaOrderOptions.Add("Type:", currPizza.name, currPizza.origPrice);
+            pizzaOrderOptions.Add("Size:", currPizza.size.ToString(), (float)currPizza.size);
+            pizzaOrderOptions.Add("Crust:", currPizza.crust.ToString(), (float)currPizza.crust);
+
+            OptionsGenerator extraOptions = new OptionsGenerator();
+            extraOptions.Add("b", "Back to Store Menu");
+            extraOptions.Add("q", "Quit");
+
+            var userInput = "";
+            do
+            {
+                Console.WriteLine($"\n------------View Order ({user.userName}) (Total = $ {currPizza.totalPrice})------------");
+                if (currPizza != null)
+                {
+                    pizzaOrderOptions.DisplayOptions(1);
+                }
+                else
+                {
+                    Console.WriteLine("No pizza selected");
+                }
+
+                DashPaddings(60);
+                extraOptions.DisplayOptions();
+                DashPaddings(60);
+                Console.Write("Input: ");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "b":
+                        StoreMenu();
+                        break;
+                    case "q":
+                        Environment.Exit(-1);
+                        break;
+                }
+            } while (userInput != "q");
+        }
+
+
+            private static void ConfirmOrderMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
             PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
@@ -134,9 +180,9 @@ namespace PizzaBox.Client
                 // new pizza prices
                 float pThin = currPizza.totalPrice + (float) Pizza.Crust.Thin;
                 float pCheesy = currPizza.totalPrice + (float) Pizza.Crust.Cheesy;
-                Console.WriteLine("r".PadRight(12) + "8 in".PadRight(20) + $"$ {currPizza.totalPrice}");
-                Console.WriteLine("t".PadRight(12) + "12 in".PadRight(20) + $"$ {pThin}");
-                Console.WriteLine("c".PadRight(12) + "16 in".PadRight(20) + $"$ {pCheesy}");
+                Console.WriteLine("r".PadRight(12) + "Regular".PadRight(20) + $"$ {currPizza.totalPrice}");
+                Console.WriteLine("t".PadRight(12) + "Thin".PadRight(20) + $"$ {pThin}");
+                Console.WriteLine("c".PadRight(12) + "Cheesy".PadRight(20) + $"$ {pCheesy}");
                 DashPaddings(60);
                 extraMenu.DisplayOptions();
                 DashPaddings(60);
@@ -148,7 +194,7 @@ namespace PizzaBox.Client
                     // select regular 
                     currPizza.SetCrust(Pizza.Crust.Regular);
                     OrderManager.Instance.SetCurrPizza(currPizza);
-                    ViewOrderMenu();
+                    ConfirmOrderMenu();
                     break;
                 }
                 else if (userInput == "t")
@@ -156,7 +202,7 @@ namespace PizzaBox.Client
                     // select thin
                     currPizza.SetCrust(Pizza.Crust.Thin);
                     OrderManager.Instance.SetCurrPizza(currPizza);
-                    ViewOrderMenu();
+                    ConfirmOrderMenu();
                     break;
                 }
                 else if (userInput == "c")
@@ -164,7 +210,7 @@ namespace PizzaBox.Client
                     // select cheesy
                     currPizza.SetCrust(Pizza.Crust.Cheesy);
                     OrderManager.Instance.SetCurrPizza(currPizza);
-                    ViewOrderMenu();
+                    ConfirmOrderMenu();
                     break;
                 }
                 else if (userInput == "b")
