@@ -91,6 +91,8 @@ namespace PizzaBox.Client
                         list.Add(currPizza);
                         Order order = new Order(list, user.id, currPizza.totalPrice, user.userName);
                         OrderManager.Instance.SubmitOrder(order);
+                        Console.WriteLine("Order Confirmed!");
+                        StoreMenu();
                         // add order to user order list
                         // add order to store order list
                         
