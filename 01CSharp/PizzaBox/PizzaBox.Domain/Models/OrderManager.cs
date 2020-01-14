@@ -35,7 +35,7 @@ namespace PizzaBox.Domain.Models
             User user = AccountManager.Instance.GetCurrUser();
             user.AddOrder(order);
 
-            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            Restaurant store = PizzaStoreManager.Instance.GetCurrStore();
             store.AddOrder(order);
         }
 

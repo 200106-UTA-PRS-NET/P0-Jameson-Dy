@@ -9,6 +9,7 @@ namespace PizzaBox.Domain
         private string name;
         public int id { get; set; }
         private List<Order> orderHistory = new List<Order>();
+        private List<int> orderHistoryID = new List<int>();
         public string userName { get; set; }
         public string password { get; set; }
 

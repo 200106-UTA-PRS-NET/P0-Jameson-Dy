@@ -7,24 +7,23 @@ namespace PizzaBox.Domain.Models
     public class Order
     {
         private long id;
-        private string customerName;
         private int customerID;
+        private int restaurantID;
         private float totalPrice;
-        private List<Pizza> pizzaList = new List<Pizza>();
+        private List<Pizza> pizzaOrders = new List<Pizza>();
 
         public Order() { }
 
-        public Order(List<Pizza> pizzaList, int customerID, float totalPrice, string customerName)
+        public Order(List<Pizza> pizzaOrders, int customerID, int restaurantID)
         {
-            this.pizzaList = pizzaList;
+            this.pizzaOrders = pizzaOrders;
             this.customerID = customerID;
-            this.totalPrice = totalPrice;
-            this.customerName = customerName;
+            this.restaurantID = restaurantID; 
         }
 
         public void DisplayOrder()
         {
-            foreach (var pizza in pizzaList)
+            foreach (var pizza in pizzaOrders)
             {
                 Console.WriteLine("Pizza " + pizza.name);
                 Console.WriteLine("total price " + totalPrice);

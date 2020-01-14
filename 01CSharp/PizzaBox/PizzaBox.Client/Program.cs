@@ -96,7 +96,7 @@ namespace PizzaBox.Client
             private static void ConfirmOrderMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
-            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            PizzaStore restaurant = PizzaStoreManager.Instance.GetCurrStore();
             Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
             OptionsGenerator pizzaOrderOptions = new OptionsGenerator();
@@ -135,7 +135,7 @@ namespace PizzaBox.Client
                         //TODO Confirm order
                         List<Pizza> list = new List<Pizza>();
                         list.Add(currPizza);
-                        Order order = new Order(list, user.id, currPizza.totalPrice, user.userName);
+                        Order order = new Order(list, user.id, restaurant.storeID);
                         OrderManager.Instance.SubmitOrder(order);
                         Console.WriteLine("Order Confirmed!");
                         StoreMenu();
