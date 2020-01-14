@@ -27,12 +27,12 @@ namespace PizzaBox.Domain.Models
             }
         }
 
-        public List<Restaurant> GetStoreList()
+        public List<Restaurant> GetRestaurantList()
         {
             return new List<Restaurant>(restaurants.Values);
         }
 
-        public List<int> GetStoreIDList()
+        public List<int> GetRestaurantIDList()
         {
             return new List<int>(restaurants.Keys);
         }
@@ -42,7 +42,7 @@ namespace PizzaBox.Domain.Models
         {
             if (store != null)
             {
-                restaurants.Add(store.storeID, store);
+                restaurants.Add(store.id, store);
                 return true;
             }
             else

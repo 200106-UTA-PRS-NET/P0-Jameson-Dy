@@ -17,15 +17,15 @@ namespace PizzaBox.Client
             AccountManager.Instance.CreateUser("mcdonald", "imlovinit");
 
             // test stores
-            PizzaStore pizahat = new PizzaStore();
+            Restaurant pizahat = new Restaurant();
             pizahat.name = "Pizahat";
-            pizahat.storeID = 1;
-            PizzaStoreManager.Instance.AddStore(pizahat);
+            pizahat.id = 1;
+            RestaurantManager.Instance.AddStore(pizahat);
 
-            PizzaStore mamajohn = new PizzaStore();
+            Restaurant mamajohn = new Restaurant();
             mamajohn.name = "Mama Johns";
-            mamajohn.storeID = 2;
-            PizzaStoreManager.Instance.AddStore(mamajohn);
+            mamajohn.id = 2;
+            RestaurantManager.Instance.AddStore(mamajohn);
 
             // test pizzas
             Pizza peperoniPizza = new Pizza(1, "Peperoni");
@@ -33,10 +33,10 @@ namespace PizzaBox.Client
             Pizza waterPizza = new Pizza(3, "Water", 20f);
             Pizza ultimaPizza = new Pizza(4, "Ultima", 12.50f);
 
-            PizzaStoreManager.Instance.AddPizzaToStore(peperoniPizza, pizahat);
-            PizzaStoreManager.Instance.AddPizzaToStore(supremePizza, pizahat);
-            PizzaStoreManager.Instance.AddPizzaToStore(waterPizza, mamajohn);
-            PizzaStoreManager.Instance.AddPizzaToStore(ultimaPizza, mamajohn);
+            RestaurantManager.Instance.AddPizzaToStore(peperoniPizza, pizahat);
+            RestaurantManager.Instance.AddPizzaToStore(supremePizza, pizahat);
+            RestaurantManager.Instance.AddPizzaToStore(waterPizza, mamajohn);
+            RestaurantManager.Instance.AddPizzaToStore(ultimaPizza, mamajohn);
 
             MainMenu();
 
@@ -96,7 +96,7 @@ namespace PizzaBox.Client
             private static void ConfirmOrderMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
-            PizzaStore restaurant = PizzaStoreManager.Instance.GetCurrStore();
+            Restaurant restaurant = RestaurantManager.Instance.GetCurrStore();
             Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
             OptionsGenerator pizzaOrderOptions = new OptionsGenerator();
@@ -135,7 +135,7 @@ namespace PizzaBox.Client
                         //TODO Confirm order
                         List<Pizza> list = new List<Pizza>();
                         list.Add(currPizza);
-                        Order order = new Order(list, user.id, restaurant.storeID);
+                        Order order = new Order(list, user.id, restaurant.id);
                         OrderManager.Instance.SubmitOrder(order);
                         Console.WriteLine("Order Confirmed!");
                         StoreMenu();
@@ -160,7 +160,7 @@ namespace PizzaBox.Client
         private static void CrustTypeMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
-            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            Restaurant store = RestaurantManager.Instance.GetCurrStore();
             OptionsGenerator pizzasMenu = new OptionsGenerator();
             List<Pizza> pizzaList = store.GetPizzaList();
             List<int> pizzaIDList = store.GetPizzaIDList();
@@ -230,7 +230,7 @@ namespace PizzaBox.Client
         private static void PizzaSizeMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
-            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            Restaurant store = RestaurantManager.Instance.GetCurrStore();
             OptionsGenerator pizzasMenu = new OptionsGenerator();
             List<Pizza> pizzaList = store.GetPizzaList();
             List<int> pizzaIDList = store.GetPizzaIDList();
@@ -302,7 +302,7 @@ namespace PizzaBox.Client
         private static void PizzaSelectMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
-            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            Restaurant store = RestaurantManager.Instance.GetCurrStore();
             OptionsGenerator pizzasMenu = new OptionsGenerator();
             Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
@@ -357,7 +357,7 @@ namespace PizzaBox.Client
         private static void StoreMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
-            PizzaStore store = PizzaStoreManager.Instance.GetCurrStore();
+            Restaurant store = RestaurantManager.Instance.GetCurrStore();
             OptionsGenerator storeMenu = new OptionsGenerator();
             Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
@@ -410,17 +410,17 @@ namespace PizzaBox.Client
             User user = AccountManager.Instance.GetCurrUser();
 
             var userInput = "";
-            List<PizzaStore> stores = PizzaStoreManager.Instance.GetStoreList();
-            List<int> storeIDs = PizzaStoreManager.Instance.GetStoreIDList();
+            List<Restaurant> restaurants = RestaurantManager.Instance.GetRestaurantList();
+            List<int> restaurantIDs = RestaurantManager.Instance.GetRestaurantIDList();
 
             OptionsGenerator extraMenu = new OptionsGenerator();
             extraMenu.Add("b", "Back to UserMenu");
             extraMenu.Add("q", "Quit");
 
             OptionsGenerator storeSelectMenu = new OptionsGenerator();
-            foreach (PizzaStore store in stores)
+            foreach (Restaurant store in restaurants)
             {
-                storeSelectMenu.Add(store.storeID.ToString(), store.name);
+                storeSelectMenu.Add(store.id.ToString(), store.name);
                 //Console.WriteLine(store.name);
             }
 
@@ -436,13 +436,13 @@ namespace PizzaBox.Client
                 Console.Write("Input: ");
                 userInput = Console.ReadLine();
 
-                if (int.TryParse(userInput, out int storeID))
+                if (int.TryParse(userInput, out int id))
                 {
                     // numeric input
-                    if (storeIDs.Contains(storeID))
+                    if (restaurantIDs.Contains(id))
                     {
                         // Go to that store 
-                        PizzaStoreManager.Instance.SetCurrStore(storeID);
+                        RestaurantManager.Instance.SetCurrStore(id);
                         StoreMenu();
                         break;
 

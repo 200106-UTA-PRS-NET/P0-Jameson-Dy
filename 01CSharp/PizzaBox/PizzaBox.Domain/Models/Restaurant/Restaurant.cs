@@ -4,10 +4,10 @@ using System.Text;
 
 namespace PizzaBox.Domain.Models
 {
-    public class PizzaStore
+    public class Restaurant
     {
         public string name { get; set; }
-        public int storeID { get; set; }
+        public int id { get; set; }
         private Dictionary<int, Pizza> pizzas = new Dictionary<int, Pizza>();
 
         private Pizza currPizza;
