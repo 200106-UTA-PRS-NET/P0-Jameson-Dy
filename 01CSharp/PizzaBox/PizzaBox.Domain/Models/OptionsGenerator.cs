@@ -42,7 +42,6 @@ namespace PizzaBox.Domain.Models
         public void Add(string c, string description)
         {
             options.Add(c, description);
-
         }
 
         public void Add(string c, string description, float price)

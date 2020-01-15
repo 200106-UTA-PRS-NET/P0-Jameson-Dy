@@ -9,6 +9,7 @@ namespace PizzaBox.Domain.Models
         private static readonly OrderManager instance = new OrderManager();
         private static Order currOrder = new Order();
         private static Pizza selectedPizza = new Pizza();
+        private static Dictionary<int, Order> allOrders = new Dictionary<int, Order>(); // contains all completed orders: key - orderID, value - order
 
         static OrderManager() { }
         private OrderManager() { }
@@ -30,14 +31,16 @@ namespace PizzaBox.Domain.Models
             return selectedPizza;
         }
 
+        /*
         public void SubmitOrder(Order order)
         {
             User user = AccountManager.Instance.GetCurrUser();
-            user.AddOrder(order);
+            //user.AddOrder(order);
 
             Restaurant store = RestaurantManager.Instance.GetCurrStore();
             store.AddOrder(order);
         }
+        */
 
     }
 }

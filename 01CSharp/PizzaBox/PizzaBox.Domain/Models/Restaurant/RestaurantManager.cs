@@ -8,9 +8,7 @@ namespace PizzaBox.Domain.Models
     {
         private static readonly RestaurantManager instance = new RestaurantManager();
         private static Dictionary<int, Restaurant> restaurants = new Dictionary<int, Restaurant>();
-
-        //private int totalStores;
-        private static Restaurant currStore;
+        private static Restaurant currRestaurant;
 
         static RestaurantManager()
         {
@@ -27,6 +25,16 @@ namespace PizzaBox.Domain.Models
             }
         }
 
+        private List<string> GetRestaurantNameList()
+        {
+            List<string> names = new List<string>();
+            foreach(Restaurant r in restaurants.Values)
+            {
+                names.Add(r.restaurantName);
+            }
+            return names;
+        }
+
         public List<Restaurant> GetRestaurantList()
         {
             return new List<Restaurant>(restaurants.Values);
@@ -38,27 +46,38 @@ namespace PizzaBox.Domain.Models
         }
 
         // add store using PizzaStore obj
-        public bool AddStore(Restaurant store)
+        public bool AddRestaurant(Restaurant store)
         {
             if (store != null)
             {
-                restaurants.Add(store.id, store);
+                if (GetRestaurantNameList().Contains(store.restaurantName))
+                {
+                    Console.WriteLine("Restaurant name" + "(" + store.restaurantName + ") is already taken");
+                    return false;
+                }
+
+                int newID = restaurants.Count + 1;
+
+                store.restaurantID = newID;
+                restaurants.Add(newID, store); //TODO: better indexing
+                Console.WriteLine("Added " + restaurants[restaurants.Count].restaurantID + " " + restaurants[restaurants.Count].restaurantName);
                 return true;
             }
             else
             {
+                Console.WriteLine("Adding restaurant failed");
                 return false;
             }
         }
 
         public Restaurant GetCurrStore()
         {
-            return currStore;
+            return currRestaurant;
         }
 
         public void SetCurrStore(int storeID)
         {
-            currStore = restaurants[storeID];
+            currRestaurant = restaurants[storeID];
         }
 
         public void AddPizzaToStore(Pizza p, Restaurant store)

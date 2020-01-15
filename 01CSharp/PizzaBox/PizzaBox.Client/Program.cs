@@ -16,27 +16,31 @@ namespace PizzaBox.Client
             AccountManager.Instance.CreateUser("fredfred", "fredfred");
             AccountManager.Instance.CreateUser("mcdonald", "imlovinit");
 
-            // test stores
-            Restaurant pizahat = new Restaurant();
-            pizahat.name = "Pizahat";
-            pizahat.id = 1;
-            RestaurantManager.Instance.AddStore(pizahat);
+            // test restaurants
+            Restaurant restaurant1 = new Restaurant();
+            restaurant1.restaurantName = "Pizahat";
+            RestaurantManager.Instance.AddRestaurant(restaurant1);
 
-            Restaurant mamajohn = new Restaurant();
-            mamajohn.name = "Mama Johns";
-            mamajohn.id = 2;
-            RestaurantManager.Instance.AddStore(mamajohn);
+            Restaurant restaurant2 = new Restaurant();
+            restaurant2.restaurantName = "Mama Johns";
+            RestaurantManager.Instance.AddRestaurant(restaurant2);
+
+            Restaurant restaurant3 = new Restaurant();
+            restaurant3.restaurantName = "Hotdogs Only";
+            RestaurantManager.Instance.AddRestaurant(restaurant3);
+
 
             // test pizzas
-            Pizza peperoniPizza = new Pizza(1, "Peperoni");
-            Pizza supremePizza = new Pizza(2, "Supreme", 9f);
-            Pizza waterPizza = new Pizza(3, "Water", 20f);
-            Pizza ultimaPizza = new Pizza(4, "Ultima", 12.50f);
+            Pizza peperoniPizza = new Pizza(1, "Peperoni", 0f);
+            Pizza supremePizza = new Pizza(2, "Supreme"), 0f);
+            Pizza waterPizza = new Pizza(3, "Water");
+            Pizza ultimaPizza = new Pizza(4, "Ultima");
+            Pizza 
 
-            RestaurantManager.Instance.AddPizzaToStore(peperoniPizza, pizahat);
-            RestaurantManager.Instance.AddPizzaToStore(supremePizza, pizahat);
-            RestaurantManager.Instance.AddPizzaToStore(waterPizza, mamajohn);
-            RestaurantManager.Instance.AddPizzaToStore(ultimaPizza, mamajohn);
+            RestaurantManager.Instance.AddPizzaToStore(peperoniPizza, restaurant1);
+            RestaurantManager.Instance.AddPizzaToStore(supremePizza, restaurant1);
+            RestaurantManager.Instance.AddPizzaToStore(waterPizza, restaurant2);
+            RestaurantManager.Instance.AddPizzaToStore(ultimaPizza, restaurant2);
 
             MainMenu();
 
@@ -47,6 +51,7 @@ namespace PizzaBox.Client
             Console.WriteLine("".PadLeft(size, '-'));
         }
 
+        /*
         static void ViewOrderMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
@@ -91,9 +96,11 @@ namespace PizzaBox.Client
                 }
             } while (userInput != "q");
         }
+        */
 
-
-            private static void ConfirmOrderMenu()
+        
+         /*
+        private static void ConfirmOrderMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
             Restaurant restaurant = RestaurantManager.Instance.GetCurrStore();
@@ -156,7 +163,9 @@ namespace PizzaBox.Client
                 }
             } while (userInput != "q");
         }
+        */
 
+        /*
         private static void CrustTypeMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
@@ -173,7 +182,7 @@ namespace PizzaBox.Client
             var userInput = "";
             do
             {
-                Console.WriteLine($"\n------------Pizza: ({currPizza.name}) ({currPizza.size} size) ({currPizza.crust} crust) ({user.userName}) (Total = $ {currPizza.totalPrice})------------");
+                Console.WriteLine($"\n------------Pizza Crust: ({currPizza.name}) ({currPizza.size} size) ({currPizza.crust} crust) ({user.userName}) (Total = $ {currPizza.totalPrice})------------");
                 Console.WriteLine("Code".PadRight(12) + "Crust Type".PadRight(20) + "Price");
                 DashPaddings(60);
 
@@ -227,6 +236,9 @@ namespace PizzaBox.Client
             while (userInput != "q");
         }
 
+    */
+
+        /*
         private static void PizzaSizeMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
@@ -298,7 +310,9 @@ namespace PizzaBox.Client
             }
             while (userInput != "q");
         }
+        */
 
+        /*
         private static void PizzaSelectMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
@@ -354,7 +368,9 @@ namespace PizzaBox.Client
             } while (userInput != "q");
         }
 
-        private static void StoreMenu()
+    */
+
+        static void StoreMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
             Restaurant store = RestaurantManager.Instance.GetCurrStore();
@@ -362,18 +378,19 @@ namespace PizzaBox.Client
             Pizza currPizza = OrderManager.Instance.GetCurrPizza();
 
             storeMenu.Add("a", "Add from PizzaMenu");
-            storeMenu.Add("c", "CustomPizza");
-            storeMenu.Add("v", "ViewOrder");
+            storeMenu.Add("c", "CustomPizza(TODO)");
+            storeMenu.Add("v", "ViewCurrentOrder(TODO)");
+            storeMenu.Add("h", "ViewStoreOrderHistory(TODO)");
             storeMenu.Add("b", "Back to Store Selection");
             storeMenu.Add("s", "SignOut");
             storeMenu.Add("q", "Quit");
 
-
             var userInput = "";
-            store.Greetings();
             do
             {
-                Console.WriteLine($"----------{store.name} ({user.userName}) (Total = $ {currPizza.totalPrice})----------");
+                Console.Clear();
+                store.Greetings();
+                Console.WriteLine("\n" + $"Store Menu ({store.restaurantName}) ({user.username}) (Total = $ {currPizza.GetTotalPrice()})".PadLeft(50, '-').PadRight(60, '-'));
                 storeMenu.DisplayOptions();
                 DashPaddings(60);
                 Console.Write("Input: ");
@@ -382,16 +399,19 @@ namespace PizzaBox.Client
                 switch(userInput)
                 {
                     case "a":
-                        PizzaSelectMenu();
+                        //PizzaSelectMenu();
                         break;
                     case "c":
                         //TODO custom pizza
                         break;
                     case "v":
-                        ViewOrderMenu();
+                        //ViewOrderMenu();
+                        break;
+                    case "h":
+                        //ViewStoreOrderHistory
                         break;
                     case "b":
-                        StoreSelectMenu();
+                        RestaurantSelectMenu();
                         break;
                     case "s":
                         SignOut();
@@ -405,13 +425,11 @@ namespace PizzaBox.Client
 
         }
 
-        private static void StoreSelectMenu()
+        static void RestaurantSelectMenu()
         {
             User user = AccountManager.Instance.GetCurrUser();
 
-            var userInput = "";
             List<Restaurant> restaurants = RestaurantManager.Instance.GetRestaurantList();
-            List<int> restaurantIDs = RestaurantManager.Instance.GetRestaurantIDList();
 
             OptionsGenerator extraMenu = new OptionsGenerator();
             extraMenu.Add("b", "Back to UserMenu");
@@ -420,13 +438,14 @@ namespace PizzaBox.Client
             OptionsGenerator storeSelectMenu = new OptionsGenerator();
             foreach (Restaurant store in restaurants)
             {
-                storeSelectMenu.Add(store.id.ToString(), store.name);
-                //Console.WriteLine(store.name);
+                storeSelectMenu.Add(store.restaurantID.ToString(), store.restaurantName);
             }
 
+            var userInput = "";
             do
             {
-                Console.WriteLine($"\n------------Store Selection ({user.userName})------------");
+                Console.Clear();
+                Console.WriteLine("\n" + $"Store Selection ({user.username})".PadLeft(30, '-').PadRight(60, '-'));
                 Console.WriteLine("Code".PadRight(12) + "StoreName");
                 DashPaddings(60);
                 storeSelectMenu.DisplayOptions();
@@ -439,19 +458,18 @@ namespace PizzaBox.Client
                 if (int.TryParse(userInput, out int id))
                 {
                     // numeric input
-                    if (restaurantIDs.Contains(id))
+                    if (RestaurantManager.Instance.GetRestaurantIDList().Contains(id))
                     {
                         // Go to that store 
                         RestaurantManager.Instance.SetCurrStore(id);
                         StoreMenu();
                         break;
-
                     }
                 }
                 else if (userInput  == "b")
                 {
-                    //return to usermenu
                     UserMenu();
+                    break;
                 }
                 else if (userInput == "q")
                 {
@@ -460,27 +478,26 @@ namespace PizzaBox.Client
                 }
             } 
             // 
-            while (userInput != "q" && userInput != "b");
+            while (userInput != "q");
         }
-
-
-
-        private static void UserMenu()
+  
+        static void UserMenu()
         {
             var userInput = "";
             User user = AccountManager.Instance.GetCurrUser();
 
             OptionsGenerator userMenuOptions = new OptionsGenerator();
             userMenuOptions.Add("g", "GoToPizzaStore");
-            userMenuOptions.Add("h", "ViewOrderHistory");
-            userMenuOptions.Add("i", "ViewUserInfo");
-            userMenuOptions.Add("e", "EditUserInfo");
+            userMenuOptions.Add("h", "ViewOrderHistory(TODO)");
+            userMenuOptions.Add("v", "ViewUserInfo");
+            userMenuOptions.Add("e", "EditUserInfo(TODO)");
             userMenuOptions.Add("s", "SignOut");
             userMenuOptions.Add("q", "Quit");
 
             do
             {
-                Console.WriteLine($"------------User Menu ({user.userName})------------");
+                Console.Clear();
+                Console.WriteLine("\n" + $"User Menu ({user.username})".PadLeft(30, '-').PadRight(60, '-'));
                 userMenuOptions.DisplayOptions();
                 DashPaddings(60);
                 Console.Write("Input: ");
@@ -489,10 +506,11 @@ namespace PizzaBox.Client
                 switch (userInput)
                 {
                     case "g":
-                        StoreSelectMenu();
+                        RestaurantSelectMenu();
                         break;
                     case "h":
                         //TODO: view order history menu
+                        /*
                         List<Order> orders = user.GetOrderHistory();
                         if (orders.Count > 0)
                         {
@@ -502,9 +520,12 @@ namespace PizzaBox.Client
                         {
                             Console.WriteLine("No orders");
                         }
+                        */
                         break;
-                    case "i":
-                        //TODO: view user info
+                    case "v":
+                        AccountManager.Instance.DisplayCurrUserInfo();
+                        Console.Write("\nPress enter to continue");
+                        Console.Read();
                         break;
                     case "e":
                         //TODO: edit user info
@@ -537,7 +558,8 @@ namespace PizzaBox.Client
 
             do
             {
-                Console.WriteLine("\n------------Main Menu------------");
+                Console.Clear();
+                Console.WriteLine("\n" + "Main Menu".PadLeft(30, '-').PadRight(60, '-'));
                 mainMenuOptions.DisplayOptions();
                 DashPaddings(60);
                 Console.Write("Input: ");
@@ -577,7 +599,6 @@ namespace PizzaBox.Client
                         if (isCreateSuccess)
                         {
                             Console.WriteLine("Account successfully created");
-
                         }
                         else
                         {
@@ -585,12 +606,11 @@ namespace PizzaBox.Client
                         }
                         break;
                     case "l":
-                        AccountManager.Instance.ListUsers();
+                        AccountManager.Instance.DisplayAllUsers();
                         break;
                     case "q":
                         Environment.Exit(-1);
                         break;
-
                 }
             } while (userInput != "q");
         }

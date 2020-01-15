@@ -6,7 +6,7 @@ namespace PizzaBox.Domain.Models
 {
     public class Order
     {
-        private long id;
+        private int id;
         private int customerID;
         private int restaurantID;
         private float totalPrice;

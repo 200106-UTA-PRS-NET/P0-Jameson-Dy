@@ -6,13 +6,10 @@ using System.Text;
 
 namespace PizzaBox.Domain.Models
 {
-
     public sealed class AccountManager
     {
         private static readonly AccountManager instance = new AccountManager();
-        //private static int totalUsers;
         private static Dictionary<int, User> users = new Dictionary<int, User>(); // key - userID, value - User object 
-        private static Dictionary<string, int> userIDs = new Dictionary<string, int>(); // key - username, value - userID
         private static User currUser;
 
         const int MIN_PASSWORD_LENGTH = 8;
@@ -36,18 +33,69 @@ namespace PizzaBox.Domain.Models
             }
         }
 
+        private List<int> GetUserIDList()
+        {
+            return new List<int>(users.Keys);
+        }
+        // returns a list of all usernames
+        private List<string> GetUsernameList()
+        {
+            List<string> usernames = new List<string>();
+            foreach (User u in users.Values)
+            {
+                usernames.Add(u.username);
+            }
+
+            return usernames;
+        }
+
+        private List<User> GetUsersList()
+        {
+            return new List<User>(users.Values);
+        }
+
+        private string GetUsernameByID(int id)
+        {
+            List<User> userList = GetUsersList();
+            foreach (User u in userList)
+            {
+                if (u.userID == id)
+                {
+                    return u.username;
+                }
+            }
+            throw new KeyNotFoundException();
+        }
+
+        private User GetUserByUsername(string username)
+        {
+            foreach (User u in GetUsersList())
+            {
+                if (u.username == username)
+                {
+                    return u;
+                }
+            }
+            return null;
+        }
+
         public bool CreateUser(string username, string password)
         {
             if (IsValidUserNamePassword(username, password))
             {
+                if (GetUsernameList().Contains(username))
+                {
+                    Console.WriteLine("Username already in use");
+                    return false;
+                }
                 // create user
                 User newUser = new User();
-                newUser.userName = username;
+                newUser.username = username;
                 newUser.password = password;
-                newUser.id = users.Count + 1;
+                newUser.userID = users.Count + 1;   //TODO: need to adjust for when removing user functionality is added 
 
-                userIDs.Add(username, newUser.id);
-                users.Add(newUser.id, newUser);
+                // add to users dictionary
+                users.Add(newUser.userID, newUser);
 
                 return true;
             } else
@@ -56,7 +104,8 @@ namespace PizzaBox.Domain.Models
             }
         }
 
-        // returns true if username and password entry is valid
+        // returns true if username and password follows the constraints
+        //TODO: (Optional) require stronger password (Capitalize, 1 char, 1 number)
         public bool IsValidUserNamePassword(string username, string password)
         {
             bool validUsername = false;
@@ -88,44 +137,53 @@ namespace PizzaBox.Domain.Models
         {
             if (IsValidUserNamePassword(username, password))
             {
-
-                try
+                if (GetUsernameList().Contains(username))
                 {
-                    User user = users[userIDs[username]];
+                    //Assert: username is in list
+                    User user = GetUserByUsername(username);
                     if (user.password == password)
                     {
-                        Console.WriteLine("\nSign in successful");
+                        // password match
                         currUser = user;
+                        Console.WriteLine("\nSign in successful :)");
                         return true;
                     }
                     else
                     {
+                        // wrong password
                         Console.WriteLine("\nSign in failed :(");
                         return false;
                     }
-                } catch (KeyNotFoundException e)
+
+                }
+                else
                 {
-                    // log exception
+                    //username not found
                     Console.WriteLine("\nSign in failed :(");
                     return false;
                 }
-
             }
             else
             {
                 Console.WriteLine("\nSign in failed :(");
                 return false;
             }
-
-
         }
 
-        public void GetUserInfo(int id)
+        public User GetUser(int id)
         {
-            Console.WriteLine(users[id].userName);
+            return users[id];
         }
 
-        public void UpdateUserInfo()
+        public void DisplayCurrUserInfo()
+        {         
+            //TODO: Add more display info
+            Console.WriteLine($"Username:".PadRight(15) + currUser.username);
+            Console.WriteLine($"UserID:".PadRight(15) + currUser.userID);
+        }
+
+        // TODO: check if valid inputs + update user
+        public void UpdateUserInfo(int id)
         {
             Console.Write("Name: ");
             string name =  Console.ReadLine();
@@ -136,14 +194,14 @@ namespace PizzaBox.Domain.Models
         }
 
         // Displays all user's username and id
-        public void ListUsers()
+        public void DisplayAllUsers()
         {
-            Console.WriteLine($"\nTotal Users: {users.Count}");
-            Console.WriteLine($"{"Username", -20}UserID");
+            Console.WriteLine($"Total Users:".PadRight(15) + users.Count);
+            Console.WriteLine("Username".PadRight(15) + "UserID");
             Console.WriteLine("".PadLeft(40, '-'));
             foreach (User u in users.Values) {
-                string n = u.id.ToString("D" + 8);  // converts to string with leading decimal 0s
-                Console.WriteLine($"{u.userName, -20}{n}");
+                string id = u.userID.ToString("D" + 8);  // converts to string with leading decimal 0s
+                Console.WriteLine($"{u.username}".PadRight(15) + id);
             }
         }
 
@@ -162,11 +220,6 @@ namespace PizzaBox.Domain.Models
             currUser = null;
             Console.WriteLine("\nSigned out");
         }
-
-
-
-
-
 
     }
 }
