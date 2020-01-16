@@ -13,9 +13,4 @@
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mocks\" />
-    <Folder Include="Specs\" />
-  </ItemGroup>
-
 </Project>

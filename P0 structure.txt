@@ -1,0 +1,43 @@
+Customer
+	customerID		int				pk
+	name			str
+	username		str
+	password		str
+	lastOrderID		int				fk ref Order.orderID
+	
+	GetOrderHistory()				query in Order using key(userID)
+	
+Restaurant
+	restaurantID	int				pk
+	name			str
+	
+	GetPresetPizzas()				query in Pizza using key(restaurantID)
+	
+Order
+	orderID			int				pk
+	userID			int
+	restaurantID	int
+	orderDate		DateTime
+	totalPrice		float
+	pizzaID			int				fk ref Pizza.pizzaID
+
+OrderHistory
+	orderHistoryID	int
+	
+PresetPizzas
+	restaurantID 	int				fk ref Restaurant.restaurantID
+	pizzaID			int				fk ref Pizza.pizzaID
+	
+Pizza
+	pizzaID			int 			pk
+	crust			int // Enum.Crust
+	size			int // Enum.Size 
+	sauce			int // Enum.Sauce
+	toppingsID		int				fk ref Toppings.toppingsID
+	totalPrice		float
+	
+Toppings
+	toppingsID		int		
+	
+	
+	
