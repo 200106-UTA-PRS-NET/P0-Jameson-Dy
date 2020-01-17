@@ -57,20 +57,30 @@ namespace PizzaBox.Domain
                 Console.Write("Input: ");
                 userInput = Console.ReadLine();
 
+                string usernameInput;
+                string passwordInput;
+
                 switch (userInput)
                 {
                     case "s":
                         // signin option
-                        string usernameInput = "";
-                        string passwordInput = "";
-
-                        Console.WriteLine("\n----------Sign In----------");
+                        Console.WriteLine(PadMiddle("Sign In"));
 
                         Console.Write("Username: ");
                         usernameInput = Console.ReadLine();
                         Console.Write("Password: ");
                         passwordInput = Console.ReadLine();
 
+                        if (customerRepo.SignIn(usernameInput, passwordInput))
+                        {
+                            Console.WriteLine("Signing in account successful");
+                            MenuSystemManager.PressEnterToContinue();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Signing in account failed");
+                            MenuSystemManager.PressEnterToContinue();
+                        }
                         //validate username and password      
                         /*
                         if (CustomerDAO.Instance.SignIn(usernameInput, passwordInput))
@@ -81,7 +91,8 @@ namespace PizzaBox.Domain
                         break;
                     case "r":
                         // register option
-                        Console.WriteLine("\n------------Creating Account------------");
+                        Console.WriteLine(PadMiddle("Creating Account"));
+
                         Console.WriteLine("Username and Password must be between 8 and 20 characters\n");
 
                         Console.Write("Username: ");

@@ -10,7 +10,7 @@ namespace PizzaBox.Storing.Interfaces
         public IEnumerable<Customer> GetCustomers();
         public bool RegisterCustomer(string username, string password, string fname, string lname);
         public void RegisterCustomerTest(string username, string password, string fname, string lname);
-        public bool SignIn();
+        public bool SignIn(string username, string password);
 
         public List<string> GetUsernames();
 

@@ -81,11 +81,7 @@ namespace PizzaBox.Domain.Models
             return true;
         }
 
-        public bool SignIn()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public List<string> GetUsernames()
         {
             var query = from e in db.Customer
@@ -93,6 +89,11 @@ namespace PizzaBox.Domain.Models
 
             return new List<string>(query);
             
+        }
+
+        public bool SignIn(string username, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }
