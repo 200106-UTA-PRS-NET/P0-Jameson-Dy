@@ -38,7 +38,6 @@ namespace PizzaBox.Domain
 
         public static void MainMenu()
         {
-
             var userInput = "";
             OptionsGenerator mainMenuOptions = new OptionsGenerator();
             mainMenuOptions.Add("s", "Signin");
@@ -75,24 +74,18 @@ namespace PizzaBox.Domain
                         {
                             Console.WriteLine("\nSigning in account successful");
                             MenuSystemManager.PressEnterToContinue();
+                            UserMenu();
+                            break;
                         }
                         else
                         {
                             Console.WriteLine("\nSigning in account failed");
                             MenuSystemManager.PressEnterToContinue();
                         }
-                        //validate username and password      
-                        /*
-                        if (CustomerDAO.Instance.SignIn(usernameInput, passwordInput))
-                        {
-                            //UserMenu();
-                        }
-                        */
                         break;
                     case "r":
                         // register option
                         Console.WriteLine(PadMiddle("Creating Account"));
-
                         Console.WriteLine("Username and Password must be between 8 and 20 characters\n");
 
                         Console.Write("Username: ");
@@ -115,10 +108,6 @@ namespace PizzaBox.Domain
                             Console.WriteLine("\nCreating account failed");
                             MenuSystemManager.PressEnterToContinue();
                         }
-
-                        //customerRepo.RegisterCustomerTest(usernameInput, passwordInput, firstNameInput, lastNameInput);
-
-
                         break;
                     case "l":
                         //Display all customers
@@ -138,6 +127,68 @@ namespace PizzaBox.Domain
                         Environment.Exit(-1);
                         break;
                 }
+            } while (userInput != "q");
+        }
+        static void UserMenu()
+        {
+            var userInput = "";
+
+            OptionsGenerator userMenuOptions = new OptionsGenerator();
+            userMenuOptions.Add("g", "GoToPizzaStore");
+            userMenuOptions.Add("h", "ViewOrderHistory(TODO)");
+            userMenuOptions.Add("v", "ViewUserInfo");
+            userMenuOptions.Add("e", "EditUserInfo(TODO)");
+            userMenuOptions.Add("s", "SignOut");
+            userMenuOptions.Add("q", "Quit");
+
+            do
+            {
+                var customerRepo = Dependencies.CreateCustomerRepository();
+                Customer currCustomer = customerRepo.GetCurrentCustomer();
+
+                Console.Clear();
+                Console.WriteLine("\n" + $"User Menu ({currCustomer.Username}) ".PadLeft(30, '-').PadRight(60, '-'));
+                userMenuOptions.DisplayOptions();
+                DashPaddings(60);
+                Console.Write("Input: ");
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "g":
+                        //RestaurantSelectMenu();
+                        break;
+                    case "h":
+                        //TODO: view order history menu
+                        /*
+                        List<Order> orders = user.GetOrderHistory();
+                        if (orders.Count > 0)
+                        {
+                            Order firstOrder = orders[0];
+                            firstOrder.DisplayOrder();
+                        } else
+                        {
+                            Console.WriteLine("No orders");
+                        }
+                        */
+                        break;
+                    case "v":
+                        customerRepo.DisplayCurrCustomerInfo();
+                        Console.Write("\nPress enter to continue");
+                        Console.Read();
+                        break;
+                    case "e":
+                        //TODO: edit user info
+                        break;
+                    case "s":
+                        customerRepo.SignOut();
+                        MainMenu();
+                        break;
+                    case "q":
+                        Environment.Exit(-1);
+                        break;
+                }
+
             } while (userInput != "q");
         }
     }
