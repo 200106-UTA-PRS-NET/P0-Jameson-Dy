@@ -73,12 +73,12 @@ namespace PizzaBox.Domain
 
                         if (customerRepo.SignIn(usernameInput, passwordInput))
                         {
-                            Console.WriteLine("Signing in account successful");
+                            Console.WriteLine("\nSigning in account successful");
                             MenuSystemManager.PressEnterToContinue();
                         }
                         else
                         {
-                            Console.WriteLine("Signing in account failed");
+                            Console.WriteLine("\nSigning in account failed");
                             MenuSystemManager.PressEnterToContinue();
                         }
                         //validate username and password      
@@ -107,12 +107,12 @@ namespace PizzaBox.Domain
                         bool isCreateSuccess = customerRepo.RegisterCustomer(usernameInput, passwordInput, firstNameInput, lastNameInput);
                         if (isCreateSuccess)
                         {
-                            Console.WriteLine("Account successfully created");
+                            Console.WriteLine("\nAccount successfully created");
                             MenuSystemManager.PressEnterToContinue();
                         }
                         else
                         {
-                            Console.WriteLine("Creating account failed");
+                            Console.WriteLine("\nCreating account failed");
                             MenuSystemManager.PressEnterToContinue();
                         }
 

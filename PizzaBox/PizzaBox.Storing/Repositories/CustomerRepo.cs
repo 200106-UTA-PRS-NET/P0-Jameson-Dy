@@ -93,7 +93,26 @@ namespace PizzaBox.Domain.Models
 
         public bool SignIn(string username, string password)
         {
-            throw new NotImplementedException();
+            var query = from e in db.Customer
+                        where e.Username.Equals(username)
+                        select e.Password;
+            try
+            {
+                string actualPassword = query.Single().ToString();
+                if (password == actualPassword)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            } catch (InvalidOperationException e)
+            {
+                // username does not exist
+                return false;
+            } 
+
         }
     }
 }
