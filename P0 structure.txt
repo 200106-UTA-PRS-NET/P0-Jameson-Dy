@@ -29,6 +29,7 @@ PresetPizzas
 	pizzaID			int				fk ref Pizza.pizzaID
 	
 Pizza
+	orderID
 	pizzaID			int 			pk
 	crust			int // Enum.Crust
 	size			int // Enum.Size 
@@ -38,6 +39,10 @@ Pizza
 	
 Toppings
 	toppingsID		int		
-	
+	toppingName		string	// pepperoni, sausage, ...
+
+PizzaToppings Map
+	pizzaID			int
+	toppingID		int
 	
 	

@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PizzaBox.Domain\PizzaBox.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

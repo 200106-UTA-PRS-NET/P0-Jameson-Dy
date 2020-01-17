@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
+using PizzaBox.Domain;
 
 namespace PizzaBox.Client
 {
@@ -7,7 +8,7 @@ namespace PizzaBox.Client
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            MenuSystemManager.MainMenu();
         }
 
 
