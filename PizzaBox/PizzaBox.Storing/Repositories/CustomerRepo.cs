@@ -106,8 +106,9 @@ namespace PizzaBox.Domain.Models
         public void DisplayCurrCustomerInfo()
         {
             //Display more fields
-            Console.WriteLine($"Username:".PadRight(15) + currCustomer.Username);
             Console.WriteLine($"UserID:".PadRight(15) + currCustomer.CustomerId);
+            Console.WriteLine($"Username:".PadRight(15) + currCustomer.Username);
+            Console.WriteLine($"Name:".PadRight(15) + currCustomer.FirstName + " " + currCustomer.LastName);
         }
 
         public void SignOut()
