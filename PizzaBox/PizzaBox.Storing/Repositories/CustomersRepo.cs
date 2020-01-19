@@ -1,31 +1,32 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using PizzaBox.Domain;
+using PizzaBox.Domain.Interface;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using PizzaBox.Storing.Interfaces;
 
-namespace PizzaBox.Domain.Models
+namespace PizzaBox.Storing.Repositories
 {
-    public class CustomerRepo : ICustomerRepo
+    public class CustomersRepo : ICustomersRepo
     {
         PizzaBoxDbContext db;
         TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-        static Customer currCustomer = new Customer();
+        static Customers currCustomer = new Customers();
 
-        public CustomerRepo()
+        public CustomersRepo()
         {
             db = new PizzaBoxDbContext();
         }
-        public CustomerRepo(PizzaBoxDbContext db)
+        public CustomersRepo(PizzaBoxDbContext db)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public IEnumerable<Customer> GetCustomers()
+        public IEnumerable<Customers> GetCustomers()
         {
-            var query = from e in db.Customer
+            var query = from e in db.Customers
                         select e;
 
             return query;
@@ -37,22 +38,28 @@ namespace PizzaBox.Domain.Models
             string fistnameTitle = textInfo.ToTitleCase(fname);
             string lastnameTitle = textInfo.ToTitleCase(lname);
 
-            Customer c = new Customer(username, password, fistnameTitle, lastnameTitle);
+            Customers c = new Customers();
+            c.Username = username;
+            c.Password = password;
+            c.FirstName = fistnameTitle;
+            c.LastName = lastnameTitle;
 
 
-            db.Customer.Add(c);
-            
+            db.Customers.Add(c);
+
             try
             {
                 db.SaveChanges();
 
-            } catch (DbUpdateException e)
+            }
+            catch (DbUpdateException e)
             {
                 // fail
                 // log exception
 
                 return false;
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return false;
             }
@@ -60,17 +67,17 @@ namespace PizzaBox.Domain.Models
             return true;
         }
 
-        
+
         public List<string> GetUsernames()
         {
-            var query = from e in db.Customer
+            var query = from e in db.Customers
                         select e.Username;
 
             return new List<string>(query);
-            
+
         }
 
-        public Customer GetCurrentCustomer()
+        public Customers GetCurrentCustomer()
         {
             return currCustomer;
         }
@@ -78,13 +85,13 @@ namespace PizzaBox.Domain.Models
         public bool SignIn(string username, string password)
         {
 
-            var query = from e in db.Customer
+            var query = from e in db.Customers
                         where e.Username.Equals(username)
                         select e;
 
             try
             {
-                Customer c = query.Single();
+                Customers c = query.Single();
 
                 if (password == c.Password)
                 {
@@ -95,11 +102,12 @@ namespace PizzaBox.Domain.Models
                 {
                     return false;
                 }
-            } catch (InvalidOperationException e)
+            }
+            catch (InvalidOperationException e)
             {
                 // username does not exist
                 return false;
-            } 
+            }
 
         }
 
@@ -118,4 +126,3 @@ namespace PizzaBox.Domain.Models
         }
     }
 }
-

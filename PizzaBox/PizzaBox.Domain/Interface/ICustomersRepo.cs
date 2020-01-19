@@ -1,19 +1,17 @@
-﻿using PizzaBox.Domain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PizzaBox.Storing.Interfaces
+namespace PizzaBox.Domain.Interface
 {
-    public interface ICustomerRepo
+    public interface ICustomersRepo
     {
-        public IEnumerable<Customer> GetCustomers();
+        public IEnumerable<Customers> GetCustomers();
         public bool RegisterCustomer(string username, string password, string fname, string lname);
         public bool SignIn(string username, string password);
         public void SignOut();
-        public Customer GetCurrentCustomer();
+        public Customers GetCurrentCustomer();
         public void DisplayCurrCustomerInfo();
         //public List<string> GetUsernames();
-
     }
 }

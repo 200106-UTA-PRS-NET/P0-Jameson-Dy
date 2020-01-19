@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PizzaBox.Domain
+namespace PizzaBox.Client
 {
     public class OptionsGenerator
     {

@@ -1,11 +1,9 @@
-﻿using PizzaBox.Domain.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Globalization;
 using PizzaBox.Client;
-using PizzaBox.Storing.Interfaces;
 
 namespace PizzaBox.Domain
 {
@@ -25,7 +23,7 @@ namespace PizzaBox.Domain
             Console.WriteLine("".PadLeft(size, '-'));
         }
 
-        public static void PressEnterToContinue()
+        public static void PressAnyToContinue()
         {
             Console.Write("\nPress any key to continue");
             Console.ReadKey(true);
@@ -47,7 +45,7 @@ namespace PizzaBox.Domain
 
             do
             {
-                var customerRepo = Dependencies.CreateCustomerRepository();
+                var customersRepo = Dependencies.CreateCustomerRepository();
 
                 Console.Clear();
                 Console.WriteLine("\n" + "Main Menu".PadLeft(40, '-').PadRight(80, '-'));
@@ -70,17 +68,17 @@ namespace PizzaBox.Domain
                         Console.Write("Password: ");
                         passwordInput = Console.ReadLine();
 
-                        if (customerRepo.SignIn(usernameInput, passwordInput))
+                        if (customersRepo.SignIn(usernameInput, passwordInput))
                         {
                             Console.WriteLine("\nSigning in account successful");
-                            MenuSystemManager.PressEnterToContinue();
+                            MenuSystemManager.PressAnyToContinue();
                             UserMenu();
                             break;
                         }
                         else
                         {
                             Console.WriteLine("\nSigning in account failed");
-                            MenuSystemManager.PressEnterToContinue();
+                            MenuSystemManager.PressAnyToContinue();
                         }
                         break;
                     case "r":
@@ -97,31 +95,31 @@ namespace PizzaBox.Domain
                         Console.Write("Last Name: ");
                         string lastNameInput = Console.ReadLine();
 
-                        bool isCreateSuccess = customerRepo.RegisterCustomer(usernameInput, passwordInput, firstNameInput, lastNameInput);
+                        bool isCreateSuccess = customersRepo.RegisterCustomer(usernameInput, passwordInput, firstNameInput, lastNameInput);
                         if (isCreateSuccess)
                         {
                             Console.WriteLine("\nAccount successfully created");
-                            MenuSystemManager.PressEnterToContinue();
+                            MenuSystemManager.PressAnyToContinue();
                         }
                         else
                         {
                             Console.WriteLine("\nCreating account failed");
-                            MenuSystemManager.PressEnterToContinue();
+                            MenuSystemManager.PressAnyToContinue();
                         }
                         break;
                     case "l":
                         //Display all customers
-                        IEnumerable<Customer> customers = customerRepo.GetCustomers();
+                        IEnumerable<Customers> customers = customersRepo.GetCustomers();
                         Console.WriteLine(PadMiddle("Customer List"));
                         Console.WriteLine("Total Users: " + customers.Count() + "\n");
                         Console.WriteLine("ID".PadRight(10) + "Name".PadRight(30) + "Username".PadRight(15) + "Password");
                         Console.WriteLine("--".PadRight(10) + "----".PadRight(30) + "--------".PadRight(15) + "--------");
-                        foreach (Customer c in customers)
+                        foreach (Customers c in customers)
                         {
-                            Console.WriteLine($"{c.CustomerId}".PadRight(10) + $"{c.FirstName} {c.LastName}".PadRight(30) + 
+                            Console.WriteLine($"{c.CustomerId}".PadRight(10) + $"{c.FirstName} {c.LastName}".PadRight(30) +
                                 $"{c.Username}".PadRight(15) + $"{c.Password}");
                         }
-                        PressEnterToContinue();
+                        PressAnyToContinue();
                         break;
                     case "q":
                         Environment.Exit(-1);
@@ -144,7 +142,7 @@ namespace PizzaBox.Domain
             do
             {
                 var customerRepo = Dependencies.CreateCustomerRepository();
-                Customer currCustomer = customerRepo.GetCurrentCustomer();
+                Customers currCustomer = customerRepo.GetCurrentCustomer();
 
                 Console.Clear();
                 Console.WriteLine("\n" + $"User Menu ({currCustomer.Username}) ".PadLeft(30, '-').PadRight(60, '-'));
@@ -174,8 +172,7 @@ namespace PizzaBox.Domain
                         break;
                     case "v":
                         customerRepo.DisplayCurrCustomerInfo();
-                        Console.Write("\nPress enter to continue");
-                        Console.Read();
+                        PressAnyToContinue();
                         break;
                     case "e":
                         //TODO: edit user info
