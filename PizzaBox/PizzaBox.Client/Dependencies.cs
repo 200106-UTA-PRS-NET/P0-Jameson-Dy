@@ -14,5 +14,22 @@ namespace PizzaBox.Client
             PizzaBoxDbContext db = DatabaseSystemBuilder.Instance.GetDatabase();
             return new CustomersRepo(db);
         }
+        public static IRestaurantsRepo CreateRestaurantRepository()
+        {
+            PizzaBoxDbContext db = DatabaseSystemBuilder.Instance.GetDatabase();
+            return new RestaurantsRepo(db);
+        }
+
+        public static IPizzasRepo CreatePizzaRepository()
+        {
+            PizzaBoxDbContext db = DatabaseSystemBuilder.Instance.GetDatabase();
+            return new PizzasRepo(db);
+        }
+
+        public static IOrdersRepo CreateOrderRepository()
+        {
+            PizzaBoxDbContext db = DatabaseSystemBuilder.Instance.GetDatabase();
+            return new OrdersRepo(db);
+        }
     }
 }

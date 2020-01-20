@@ -11,8 +11,8 @@ namespace PizzaBox.Storing.Repositories
 {
     public class CustomersRepo : ICustomersRepo
     {
-        PizzaBoxDbContext db;
-        TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+        readonly PizzaBoxDbContext db;
+        readonly TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
         static Customers currCustomer = new Customers();
 
         public CustomersRepo()

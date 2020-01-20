@@ -7,7 +7,7 @@ namespace PizzaBox.Client
     public class OptionsGenerator
     {
         private Dictionary<string, string> options;
-        private List<float> prices = new List<float>();
+        private List<decimal> prices = new List<decimal>();
 
         public OptionsGenerator()
         {
@@ -23,7 +23,7 @@ namespace PizzaBox.Client
             }
         }
 
-        public OptionsGenerator(List<string> symbols, List<string> descriptions, List<float> prices)
+        public OptionsGenerator(List<string> symbols, List<string> descriptions, List<decimal> prices)
         {
             options = new Dictionary<string, string>();
             this.prices.AddRange(prices);
@@ -44,7 +44,7 @@ namespace PizzaBox.Client
             options.Add(c, description);
         }
 
-        public void Add(string c, string description, float price)
+        public void Add(string c, string description, decimal price)
         {
             options.Add(c, description);
             prices.Add(price);
@@ -60,8 +60,8 @@ namespace PizzaBox.Client
                     foreach (var o in options)
                     {
                         //Console.WriteLine($"{o.Key}:\t\t{o.Value}\t\t\t{prices[i]}");
-                        Console.Write($"{o.Key}".PadRight(12));
-                        Console.Write($"{o.Value}".PadRight(20));
+                        Console.Write($"{o.Key}".PadRight(10));
+                        Console.Write($"{o.Value}".PadRight(30));
                         Console.Write($"$ {prices[i].ToString("###0.00")}\n");
 
                         i++;
@@ -79,7 +79,7 @@ namespace PizzaBox.Client
         {
             foreach (var o in options)
             {
-                Console.WriteLine($"{o.Key}:".PadRight(12) + $"{o.Value}");
+                Console.WriteLine($"{o.Key}:".PadRight(10) + $"{o.Value}");
             }
         }
 
