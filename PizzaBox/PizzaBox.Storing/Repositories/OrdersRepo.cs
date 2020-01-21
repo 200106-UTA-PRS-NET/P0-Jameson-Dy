@@ -125,7 +125,7 @@ namespace PizzaBox.Storing.Repositories
 
         public void ViewOrderHistory(int customerID)
         {
-            var orders = db.Orders.Where(o => o.CustomerId == customerID);
+            var orders = db.Orders.Where(o => o.CustomerId == customerID).OrderByDescending(o => o.OrderDate);
             var restaurants = db.RestaurantPizzasMap.Select(r => r.Restaurant).Distinct();
 
             Dictionary<int, string> restaurantDict = new Dictionary<int, string>();
@@ -152,7 +152,7 @@ namespace PizzaBox.Storing.Repositories
 
         public void ViewOrderHistory(int customerID, int restaurantID)
         {
-            var orders = db.Orders.Where(o => o.CustomerId == customerID && o.RestaurantId == restaurantID);
+            var orders = db.Orders.Where(o => o.CustomerId == customerID && o.RestaurantId == restaurantID).OrderByDescending(o => o.OrderDate);
             var restaurant = db.Restaurants.Where(r => r.RestaurantId == restaurantID).Single();
             var customer = db.Customers.Where(c => c.CustomerId == customerID).Single();
 
@@ -173,7 +173,7 @@ namespace PizzaBox.Storing.Repositories
 
         public void ViewStoreOrderHistory(int restaurantID)
         {
-            var orders = db.Orders.Where(o => o.RestaurantId == restaurantID);
+            var orders = db.Orders.Where(o => o.RestaurantId == restaurantID).OrderByDescending(o => o.OrderDate);
             var restaurant = db.Restaurants.Where(r => r.RestaurantId == restaurantID).Single();
 
             Console.WriteLine("\n" + $"{restaurant.RestaurantName} total orders: " + orders.Count());
