@@ -121,13 +121,15 @@ namespace PizzaBox.Domain
                     case "l":
                         //Display all customers
                         IEnumerable<Customers> customers = customersRepo.GetCustomers();
+                        TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
                         Console.WriteLine(PadMiddle("Customer List"));
                         Console.WriteLine("Total Users: " + customers.Count() + "\n");
                         Console.WriteLine("ID".PadRight(10) + "Name".PadRight(30) + "Username".PadRight(20) + "Password");
                         DashPaddings();
                         foreach (Customers c in customers)
                         {
-                            Console.WriteLine($"{c.CustomerId}".PadRight(10) + $"{c.FirstName} {c.LastName}".PadRight(30) +
+                            String name = textInfo.ToTitleCase(c.FirstName + " " + c.LastName);
+                            Console.WriteLine($"{c.CustomerId}".PadRight(10) + $"{name}".PadRight(30) +
                                 $"{c.Username}".PadRight(20) + $"{c.Password}");
                         }
                         PressAnyToContinue();

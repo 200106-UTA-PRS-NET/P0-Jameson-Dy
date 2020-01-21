@@ -116,7 +116,7 @@ namespace PizzaBox.Storing.Repositories
             //Display more fields
             Console.WriteLine($"UserID:".PadRight(15) + currCustomer.CustomerId);
             Console.WriteLine($"Username:".PadRight(15) + currCustomer.Username);
-            Console.WriteLine($"Name:".PadRight(15) + currCustomer.FirstName + " " + currCustomer.LastName);
+            Console.WriteLine($"Name:".PadRight(15) + textInfo.ToTitleCase(currCustomer.FirstName) + " " + textInfo.ToTitleCase(currCustomer.LastName));
         }
 
         public void SignOut()
