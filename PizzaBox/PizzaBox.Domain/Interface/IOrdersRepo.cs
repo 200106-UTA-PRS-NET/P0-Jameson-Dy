@@ -16,6 +16,7 @@ namespace PizzaBox.Domain.Interface
         public decimal GetSubtotal();
         public decimal GetCurrOrderTotalPrice();
 
+        public void ViewOrderHistory(int customerID);
         public bool SubmitOrder(int customerID, int restaurantID)
 ;
 

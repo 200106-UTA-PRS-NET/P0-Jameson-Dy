@@ -105,5 +105,22 @@ namespace PizzaBox.Storing.Repositories
 
             return true;
         }
+
+        public void ViewOrderHistory(int customerID)
+        {
+            var orders = db.Orders.Where(o => o.CustomerId == customerID);
+
+            Console.WriteLine("\n" + "Total Orders: ".PadRight(5) + orders.Count());
+            Console.WriteLine("\n" + "Order#".PadRight(10) + "Total".PadRight(10) + "Date".PadRight(15) + "Time".PadRight(10));
+            foreach(Orders o in orders)
+            {
+                string id = o.OrderId.ToString("00000");
+                string total = o.TotalPrice.Value.ToString("0.00");
+                string date = String.Format("{0:M/d/yyyy}", o.OrderDate.Value);
+                string time = String.Format("{0:t}", o.OrderDate.Value);
+
+                Console.WriteLine(id.PadRight(10) + $"$ {total}".PadRight(10) + date.PadRight(15) + time.PadRight(10));
+            }
+        }
     }
 }

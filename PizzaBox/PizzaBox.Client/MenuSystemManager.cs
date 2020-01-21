@@ -141,11 +141,14 @@ namespace PizzaBox.Domain
         static void UserMenu()
         {
 
+            var orderRepo = Dependencies.CreateOrderRepository();
+
+
             OptionsGenerator userMenuOptions = new OptionsGenerator();
             userMenuOptions.Add("g", "GoToPizzaStore");
-            userMenuOptions.Add("h", "ViewOrderHistory(TODO)");
+            userMenuOptions.Add("h", "ViewOrderHistory");
             userMenuOptions.Add("v", "ViewUserInfo");
-            userMenuOptions.Add("e", "EditUserInfo(TODO)");
+            userMenuOptions.Add("e", "EditUserInfo(Optional)");
             userMenuOptions.Add("s", "SignOut");
             userMenuOptions.Add("q", "Quit");
 
@@ -168,18 +171,8 @@ namespace PizzaBox.Domain
                         RestaurantSelectMenu();
                         break;
                     case "h":
-                        //TODO: view order history menu
-                        /*
-                        List<Order> orders = user.GetOrderHistory();
-                        if (orders.Count > 0)
-                        {
-                            Order firstOrder = orders[0];
-                            firstOrder.DisplayOrder();
-                        } else
-                        {
-                            Console.WriteLine("No orders");
-                        }
-                        */
+                        orderRepo.ViewOrderHistory(currCustomer.CustomerId);
+                        PressAnyToContinue();
                         break;
                     case "v":
                         customerRepo.DisplayCurrCustomerInfo();
