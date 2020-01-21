@@ -18,6 +18,7 @@ namespace PizzaBox.Domain.Interface
 
         public void ViewOrderHistory(int customerID);
         public void ViewOrderHistory(int customerID, int restaurantID);
+        public void ViewStoreOrderHistory(int restaurantID);
 
         public bool SubmitOrder(int customerID, int restaurantID)
 ;

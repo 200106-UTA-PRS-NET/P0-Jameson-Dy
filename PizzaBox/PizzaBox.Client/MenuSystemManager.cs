@@ -269,7 +269,8 @@ namespace PizzaBox.Domain
             storeMenu.Add("p", "PresetPizzas");
             storeMenu.Add("c", "CustomPizza(TODO)");
             storeMenu.Add("v", "ViewCurrentOrder");
-            storeMenu.Add("h", "UserStoreOrderHistory(TODO)");
+            storeMenu.Add("h", "UserStoreOrderHistory");
+            storeMenu.Add("r", "StoreOrderHistory");
             storeMenu.Add("b", "Back to Store Selection");
             storeMenu.Add("s", "SignOut");
             storeMenu.Add("q", "Quit");
@@ -299,6 +300,10 @@ namespace PizzaBox.Domain
                         break;
                     case "h":
                         ordersRepo.ViewOrderHistory(currCustomer.CustomerId, currRestaurant.RestaurantId);
+                        PressAnyToContinue();
+                        break;
+                    case "r":
+                        ordersRepo.ViewStoreOrderHistory(currRestaurant.RestaurantId);
                         PressAnyToContinue();
                         break;
                     case "b":
