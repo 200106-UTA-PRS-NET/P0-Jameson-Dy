@@ -45,6 +45,12 @@ namespace PizzaBox.Domain
             MainMenu();
         }
 
+        static void Quit()
+        {
+            Console.WriteLine("Goodbye");
+            Environment.Exit(-1);
+        }
+
         public static void MainMenu()
         {
             OptionsGenerator mainMenuOptions = new OptionsGenerator();
@@ -295,7 +301,7 @@ namespace PizzaBox.Domain
                         PresetPizzaMenu();
                         break;
                     case "c":
-                        //TODO custom pizza
+                        CustomPizzaMenu();
                         break;
                     case "v":
                         OrderConfirmMenu();
@@ -379,6 +385,45 @@ namespace PizzaBox.Domain
                 else if (userInput == "q")
                 {
                     Environment.Exit(-1);
+                    break;
+                }
+
+            } while (userInput != "q");
+        }
+        static void CustomPizzaMenu()
+        {
+            var customersRepo = Dependencies.CreateCustomerRepository();
+            Customers currCustomer = customersRepo.GetCurrentCustomer();
+
+            var restaurantsRepo = Dependencies.CreateRestaurantRepository();
+            Restaurants currRestaurant = restaurantsRepo.GetCurrentRestaurant();
+
+            var pizzasRepo = Dependencies.CreatePizzaRepository();
+
+
+            OptionsGenerator extraMenu = new OptionsGenerator();
+            extraMenu.Add("b", "Back to RestaurantMenu");
+            extraMenu.Add("q", "Quit");
+
+            var userInput = "";
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("\n" + PadMiddle($"Custom Pizza ({currRestaurant.RestaurantName}) ({currCustomer.Username}) "));
+                
+                DashPaddings();
+                extraMenu.DisplayOptions();
+                DashPaddings();
+                Console.Write("Input: ");
+                userInput = Console.ReadLine();
+
+                if (userInput == "b")
+                {
+                    RestaurantMenu();
+                    break;
+                } else if (userInput == "q")
+                {
+                    Quit();
                     break;
                 }
 
