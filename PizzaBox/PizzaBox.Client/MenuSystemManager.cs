@@ -123,12 +123,12 @@ namespace PizzaBox.Domain
                         IEnumerable<Customers> customers = customersRepo.GetCustomers();
                         Console.WriteLine(PadMiddle("Customer List"));
                         Console.WriteLine("Total Users: " + customers.Count() + "\n");
-                        Console.WriteLine("ID".PadRight(10) + "Name".PadRight(30) + "Username".PadRight(15) + "Password");
+                        Console.WriteLine("ID".PadRight(10) + "Name".PadRight(30) + "Username".PadRight(20) + "Password");
                         DashPaddings();
                         foreach (Customers c in customers)
                         {
                             Console.WriteLine($"{c.CustomerId}".PadRight(10) + $"{c.FirstName} {c.LastName}".PadRight(30) +
-                                $"{c.Username}".PadRight(15) + $"{c.Password}");
+                                $"{c.Username}".PadRight(20) + $"{c.Password}");
                         }
                         PressAnyToContinue();
                         break;
