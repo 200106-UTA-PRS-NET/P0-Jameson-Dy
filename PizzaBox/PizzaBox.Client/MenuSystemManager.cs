@@ -148,7 +148,7 @@ namespace PizzaBox.Domain
             userMenuOptions.Add("g", "GoToPizzaStore");
             userMenuOptions.Add("h", "ViewOrderHistory");
             userMenuOptions.Add("v", "ViewUserInfo");
-            userMenuOptions.Add("e", "EditUserInfo(Optional)");
+            userMenuOptions.Add("e", "EditUserInfo(TODO)");
             userMenuOptions.Add("s", "SignOut");
             userMenuOptions.Add("q", "Quit");
 
@@ -262,11 +262,14 @@ namespace PizzaBox.Domain
             var restaurantsRepo = Dependencies.CreateRestaurantRepository();
             Restaurants currRestaurant = restaurantsRepo.GetCurrentRestaurant();
 
+            var ordersRepo = Dependencies.CreateOrderRepository();
+
+
             OptionsGenerator storeMenu = new OptionsGenerator();
             storeMenu.Add("p", "PresetPizzas");
             storeMenu.Add("c", "CustomPizza(TODO)");
             storeMenu.Add("v", "ViewCurrentOrder");
-            storeMenu.Add("h", "ViewStoreOrderHistory(TODO)");
+            storeMenu.Add("h", "UserStoreOrderHistory(TODO)");
             storeMenu.Add("b", "Back to Store Selection");
             storeMenu.Add("s", "SignOut");
             storeMenu.Add("q", "Quit");
@@ -295,7 +298,8 @@ namespace PizzaBox.Domain
                         OrderConfirmMenu();
                         break;
                     case "h":
-                        //ViewStoreOrderHistory
+                        ordersRepo.ViewOrderHistory(currCustomer.CustomerId, currRestaurant.RestaurantId);
+                        PressAnyToContinue();
                         break;
                     case "b":
                         RestaurantSelectMenu();

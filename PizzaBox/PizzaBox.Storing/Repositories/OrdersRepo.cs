@@ -109,17 +109,48 @@ namespace PizzaBox.Storing.Repositories
         public void ViewOrderHistory(int customerID)
         {
             var orders = db.Orders.Where(o => o.CustomerId == customerID);
+            var restaurants = db.RestaurantPizzasMap.Select(r => r.Restaurant).Distinct();
+
+            Dictionary<int, string> restaurantDict = new Dictionary<int, string>();
+            foreach(Restaurants r in restaurants)
+            {
+                restaurantDict.Add(r.RestaurantId, r.RestaurantName);
+            }
 
             Console.WriteLine("\n" + "Total Orders: ".PadRight(5) + orders.Count());
-            Console.WriteLine("\n" + "Order#".PadRight(10) + "Total".PadRight(10) + "Date".PadRight(15) + "Time".PadRight(10));
-            foreach(Orders o in orders)
+            Console.WriteLine("\n" + "Order#".PadRight(10) + "Restaurant".PadRight(20) + "Total".PadRight(15) + "Date".PadRight(15) + "Time".PadRight(10));
+            Console.WriteLine("".PadLeft(80, '-'));
+
+            foreach (Orders o in orders)
+            {
+                string id = o.OrderId.ToString("00000");
+                string total = o.TotalPrice.Value.ToString("0.00");
+                string restaurant = restaurantDict[o.RestaurantId.Value];
+                string date = String.Format("{0:M/d/yyyy}", o.OrderDate.Value);
+                string time = String.Format("{0:t}", o.OrderDate.Value);
+
+                Console.WriteLine(id.PadRight(10) + restaurant.PadRight(20) + $"$ {total}".PadRight(15) + date.PadRight(15) + time.PadRight(10));
+            }
+        }
+
+        public void ViewOrderHistory(int customerID, int restaurantID)
+        {
+            var orders = db.Orders.Where(o => o.CustomerId == customerID && o.RestaurantId == restaurantID);
+            var restaurant = db.Restaurants.Where(r => r.RestaurantId == restaurantID).Single();
+            var customer = db.Customers.Where(c => c.CustomerId == customerID).Single();
+
+            string customerName = textInfo.ToTitleCase(customer.FirstName) + " " + textInfo.ToTitleCase(customer.LastName);
+            
+            Console.WriteLine("\n" + $"{customerName} orders from {restaurant.RestaurantName}:".PadRight(40) + orders.Count().ToString());
+            Console.WriteLine("\n" + "Order#".PadRight(10) + "Total".PadRight(15) + "Date".PadRight(15) + "Time".PadRight(10));
+            foreach (Orders o in orders)
             {
                 string id = o.OrderId.ToString("00000");
                 string total = o.TotalPrice.Value.ToString("0.00");
                 string date = String.Format("{0:M/d/yyyy}", o.OrderDate.Value);
                 string time = String.Format("{0:t}", o.OrderDate.Value);
 
-                Console.WriteLine(id.PadRight(10) + $"$ {total}".PadRight(10) + date.PadRight(15) + time.PadRight(10));
+                Console.WriteLine(id.PadRight(10) + $"$ {total}".PadRight(15) + date.PadRight(15) + time.PadRight(10));
             }
         }
     }
