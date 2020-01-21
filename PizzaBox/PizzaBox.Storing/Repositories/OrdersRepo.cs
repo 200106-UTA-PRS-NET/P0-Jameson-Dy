@@ -92,9 +92,26 @@ namespace PizzaBox.Storing.Repositories
 
             // add to orderpizzasmap
             int currOrderID = currOrder.OrderId;
-            foreach(Pizza p in currPizzas)
+
+            Dictionary<int, int> pizzaIDCount = new Dictionary<int, int>();
+            foreach (Pizza p in currPizzas)
             {
-                db.OrderPizzasMap.Add(new OrderPizzasMap() { OrderId = currOrderID, PizzaId = p.PizzaId });
+                if (pizzaIDCount.ContainsKey(p.PizzaId))
+                {
+                    // already in dict
+                    pizzaIDCount[p.PizzaId]++;
+                }
+                else
+                {
+                    pizzaIDCount.Add(p.PizzaId, 1);
+                }
+            }
+
+            var currPizzasDistinct = currPizzas.Select(p => p.PizzaId).Distinct();
+
+            foreach(int pizzaId in currPizzasDistinct)
+            {
+                db.OrderPizzasMap.Add(new OrderPizzasMap() { OrderId = currOrderID, PizzaId = pizzaId, Quantity = pizzaIDCount[pizzaId] });
             }
             db.SaveChanges();
 
