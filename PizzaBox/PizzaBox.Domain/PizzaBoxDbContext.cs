@@ -34,18 +34,13 @@ namespace PizzaBox.Domain
         {
             if (!optionsBuilder.IsConfigured)
             {
-
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                //optionsBuilder.UseSqlServer("Server=LAPTOP-5VQ0CSFS\\SQLEXPRESS ;Database=PizzaBoxDb; Trusted_Connection=True; ");
                 var configBuilder = new ConfigurationBuilder()
-          .SetBasePath(Directory.GetCurrentDirectory())
-          .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                         .SetBasePath(Directory.GetCurrentDirectory())
+                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 IConfigurationRoot configuration = configBuilder.Build();
 
                 optionsBuilder = new DbContextOptionsBuilder<PizzaBoxDbContext>();
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("PizzaBoxConnection"));
-
-
             }
         }
 
@@ -141,6 +136,10 @@ namespace PizzaBox.Domain
                 entity.Property(e => e.OrderId).HasColumnName("order_id");
 
                 entity.Property(e => e.PizzaId).HasColumnName("pizza_id");
+
+                entity.Property(e => e.Quantity)
+                    .HasColumnName("quantity")
+                    .HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderPizzasMap)
