@@ -13,6 +13,8 @@ namespace PizzaBox.Domain.Interface
         public bool SetCurrentRestaurant(Restaurants r);
         public void RemoveCurrentRestaurant();
         public IEnumerable<Pizza> GetCurrRestaurantPizzas();
+
+        public DateTime? GetLastOrderDate(int restaurantID, int customerID);
         public List<int> GetCurrRestaurantPizzaIDList();
 
     }

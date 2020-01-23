@@ -212,24 +212,63 @@ namespace PizzaBox.Domain
 
             List<Restaurants> restaurants = restaurantsRepo.GetRestaurants().ToList();
 
-            OptionsGenerator storeSelectMenu = new OptionsGenerator();
-            foreach (Restaurants store in restaurants)
-            {
-                storeSelectMenu.Add(store.RestaurantId.ToString(), store.RestaurantName);
-            }
+            //OptionsGenerator storeSelectMenu = new OptionsGenerator();
+            //foreach (Restaurants store in restaurants)
+            //{
+            //   storeSelectMenu.Add(store.RestaurantId.ToString(), store.RestaurantName);
+            //}
 
             OptionsGenerator extraMenu = new OptionsGenerator();
             extraMenu.Add("b", "Back to UserMenu");
             extraMenu.Add("q", "Quit");
 
-            var userInput = "";
+            double hoursToWait = 1;
+
+            string userInput;
             do
             {
                 Console.Clear();
                 Console.WriteLine("\n" + PadMiddle($"Store Selection ({currCustomer.Username}) "));
-                Console.WriteLine("Code".PadRight(10) + "StoreName");
+                Console.WriteLine("Code".PadRight(10) + "StoreName".PadRight(30) + "WaitTime(hr:min)".PadRight(20) + "DateLastOrdered" );
                 DashPaddings();
-                storeSelectMenu.DisplayOptions();
+
+                Dictionary<int, bool> storeAvailable = new Dictionary<int, bool>();
+                storeAvailable.Clear();
+                foreach (Restaurants store in restaurants)
+                {
+                    string rID = store.RestaurantId.ToString();
+                    string rName = store.RestaurantName;
+                    if (restaurantsRepo.GetLastOrderDate(store.RestaurantId, currCustomer.CustomerId).HasValue)
+                    {
+                        // has previous order
+                        DateTime lastOrder = restaurantsRepo.GetLastOrderDate(store.RestaurantId, currCustomer.CustomerId).Value;
+                        TimeSpan timeSinceLastOrder = DateTime.Now - lastOrder;
+                        TimeSpan waitTime = DateTime.Now - lastOrder.AddHours(hoursToWait);
+
+                        if (timeSinceLastOrder.TotalHours > hoursToWait)
+                        {
+                            // time since last order more than an hour from now
+                            Console.WriteLine(rID.PadRight(10) + rName.PadRight(30) + "Available".PadRight(20) + lastOrder);
+                            storeAvailable.Add(store.RestaurantId, true);
+                        }
+                        else
+                        {
+                            // last order was within an hour before
+                            Console.WriteLine(rID.PadRight(10) + rName.PadRight(30) + waitTime.ToString(@"hh\:mm").PadRight(20) + lastOrder);
+                            storeAvailable.Add(store.RestaurantId, false);
+
+                        }
+                    }
+                    else
+                    {
+                        // no previous order
+                        Console.WriteLine(rID.PadRight(10) + rName.PadRight(30) + "Available");
+                        storeAvailable.Add(store.RestaurantId, true);
+                    }
+
+
+                }
+                //storeSelectMenu.DisplayOptions();
                 DashPaddings();
                 extraMenu.DisplayOptions();
                 DashPaddings();
@@ -242,8 +281,18 @@ namespace PizzaBox.Domain
                     if (restaurantsRepo.GetRestaurantIDList().Contains(id))
                     {
                         // Go to that store 
-                        restaurantsRepo.SetCurrentRestaurant(id);
-                        RestaurantMenu();
+                        if (storeAvailable[id])
+                        {
+                            restaurantsRepo.SetCurrentRestaurant(id);
+                            RestaurantMenu();
+                        } else
+                        {
+                            // last order is within hoursToWait -> store not available
+                            Console.WriteLine("\nStore not available");
+                            Console.ReadKey(true);
+                            RestaurantSelectMenu();
+                        }
+
                         break;
                     }
                 }
@@ -499,8 +548,6 @@ namespace PizzaBox.Domain
         }
         static void OrderConfirmMenu()
         {
-
-
             var pizzasRepo = Dependencies.CreatePizzaRepository();
 
             var ordersRepo = Dependencies.CreateOrderRepository();
@@ -522,7 +569,7 @@ namespace PizzaBox.Domain
                 RestaurantMenu();
             }
 
-            var userInput = "";
+            string userInput;
             do
             {
                 var customersRepo = Dependencies.CreateCustomerRepository();

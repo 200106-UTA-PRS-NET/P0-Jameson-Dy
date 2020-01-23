@@ -75,6 +75,24 @@ namespace PizzaBox.Storing.Repositories
             }
         }
 
+        public DateTime? GetLastOrderDate(int restaurantID, int customerID)
+        {
+            try
+            {
+                var lastorder = db.Orders.Where(o => o.RestaurantId == restaurantID && o.CustomerId == customerID)
+                    .OrderByDescending(o => o.OrderDate)
+                    .First();
+
+                return lastorder.OrderDate.Value;
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+
+
+        }
+
         public void RemoveCurrentRestaurant()
         {
             currRestaurant = null;

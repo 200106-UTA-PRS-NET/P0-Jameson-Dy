@@ -23,6 +23,8 @@ namespace PizzaBox.Client
             }
         }
 
+
+
         public OptionsGenerator(List<string> symbols, List<string> descriptions, List<decimal> prices)
         {
             options = new Dictionary<string, string>();
