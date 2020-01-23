@@ -1,11 +1,6 @@
 ﻿using System;
-using System.IO;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using PizzaBox.Domain;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace PizzaBox.Client
@@ -14,8 +9,8 @@ namespace PizzaBox.Client
     {
         static void Main(string[] args)
         {
-            //Console.Write(Fred());
-            //Rave(Fred());
+            //Console.Write(Fred2());
+            //Rave(Fred2());
             //Console.ReadKey(true);
             Console.ForegroundColor = ConsoleColor.Yellow;
             MenuSystemManager.MainMenu();
@@ -33,7 +28,35 @@ namespace PizzaBox.Client
                        "| $$   | $$      |  $$$$$$$|  $$$$$$$\n" +
                        "|__/   |__/       \\_______/ \\_______/\n";
             return f;
+        }
 
+        public static string Fred2()
+        {
+            string f =
+"          _____                    _____                    _____                    _____          \n" +
+"         /\\    \\                  /\\    \\                  /\\    \\                  /\\    \\         \n" +
+"        /::\\    \\                /::\\    \\                /::\\    \\                /::\\    \\        \n" +
+"       /::::\\    \\              /::::\\    \\              /::::\\    \\              /::::\\    \\       \n" +
+"      /::::::\\    \\            /::::::\\    \\            /::::::\\    \\            /::::::\\    \\      \n" +
+"     /:::/\\:::\\    \\          /:::/\\:::\\    \\          /:::/\\:::\\    \\          /:::/\\:::\\    \\     \n" +
+"    /:::/__\\:::\\    \\        /:::/__\\:::\\    \\        /:::/__\\:::\\    \\        /:::/  \\:::\\    \\    \n" +
+"   /::::\\   \\:::\\    \\      /::::\\   \\:::\\    \\      /::::\\   \\:::\\    \\      /:::/    \\:::\\    \\   \n" +
+"  /::::::\\   \\:::\\    \\    /::::::\\   \\:::\\    \\    /::::::\\   \\:::\\    \\    /:::/    / \\:::\\    \\  \n" +
+" /:::/\\:::\\   \\:::\\    \\  /:::/\\:::\\   \\:::\\____\\  /:::/\\:::\\   \\:::\\    \\  /:::/    /   \\:::\\ ___\\ \n" +
+"/:::/  \\:::\\   \\:::\\____\\/:::/  \\:::\\   \\:::|    |/:::/__\\:::\\   \\:::\\____\\/:::/____/     \\:::|    |\n" +
+"\\::/    \\:::\\   \\::/    /\\::/   |::::\\  /:::|____|\\:::\\   \\:::\\   \\::/    /\\:::\\    \\     /:::|____|\n" +
+" \\/____/ \\:::\\   \\/____/  \\/____|:::::\\/:::/    /  \\:::\\   \\:::\\   \\/____/  \\:::\\    \\   /:::/    / \n" +
+"          \\:::\\    \\            |:::::::::/    /    \\:::\\   \\:::\\    \\       \\:::\\    \\ /:::/    /  \n" +
+"           \\:::\\____\\           |::|\\::::/    /      \\:::\\   \\:::\\____\\       \\:::\\    /:::/    /   \n" +
+"            \\::/    /           |::| \\::/____/        \\:::\\   \\::/    /        \\:::\\  /:::/    /    \n" +
+"             \\/____/            |::|  ~|               \\:::\\   \\/____/          \\:::\\/:::/    /     \n" +
+"                                |::|   |                \\:::\\    \\               \\::::::/    /      \n" +
+"                                \\::|   |                 \\:::\\____\\               \\::::/    /       \n" +
+"                                 \\:|   |                  \\::/    /                \\::/____/        \n" +
+"                                  \\|___|                   \\/____/                  ~~              \n";
+                                                                                                    
+
+            return f;
         }
 
         public static void Rave(string f)
@@ -44,7 +67,7 @@ namespace PizzaBox.Client
                 {
                     Console.BackgroundColor = color;
                     Console.Write($"{f}");
-                    Thread.Sleep(25);
+                    Thread.Sleep(50);
                 }
             }
         }

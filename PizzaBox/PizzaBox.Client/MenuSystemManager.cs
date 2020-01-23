@@ -556,7 +556,7 @@ namespace PizzaBox.Domain
             OptionsGenerator extraOptions = new OptionsGenerator();
             extraOptions.Add("c", "Confirm Order");
             extraOptions.Add("x", "Cancel Order");
-            extraOptions.Add("e", "Edit Order");
+            extraOptions.Add("e", "Edit Order(TODO)");
             extraOptions.Add("b", "Back to Store Menu");
             extraOptions.Add("q", "Quit");
 
