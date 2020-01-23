@@ -602,7 +602,7 @@ namespace PizzaBox.Domain
                 {
                     case "c":
                         ordersRepo.SubmitOrder(currCustomer.CustomerId, currRestaurant.RestaurantId);
-                        RestaurantMenu();
+                        RestaurantSelectMenu();
                         break;
                     case "x":
                         // cancel order

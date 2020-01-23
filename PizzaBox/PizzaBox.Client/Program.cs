@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration.Json;
 using PizzaBox.Domain;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace PizzaBox.Client
 {
@@ -13,19 +14,37 @@ namespace PizzaBox.Client
     {
         static void Main(string[] args)
         {
-            
+            //Console.Write(Fred());
+            //Rave(Fred());
+            //Console.ReadKey(true);
             Console.ForegroundColor = ConsoleColor.Yellow;
             MenuSystemManager.MainMenu();
         }
 
-        static void Rave()
+        public static string Fred()
+        {
+            string f =
+                       " /$$$$$$$$                        /$$\n" +
+                       "| $$_____/                       | $$\n" +
+                       "| $$     /$$$$$$   /$$$$$$   /$$$$$$$\n" +
+                       "| $$$$$ /$$__  $$ /$$__  $$ /$$__  $$\n" +
+                       "| $$__/| $$  \\__/| $$$$$$$$| $$  | $$\n" +
+                       "| $$   | $$      | $$_____/| $$  | $$\n" +
+                       "| $$   | $$      |  $$$$$$$|  $$$$$$$\n" +
+                       "|__/   |__/       \\_______/ \\_______/\n";
+            return f;
+
+        }
+
+        public static void Rave(string f)
         {
             while (true)
             {
                 foreach (ConsoleColor color in Enum.GetValues(typeof(ConsoleColor)))
                 {
                     Console.BackgroundColor = color;
-                    Console.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                    Console.Write($"{f}");
+                    Thread.Sleep(25);
                 }
             }
         }
@@ -46,7 +65,6 @@ namespace PizzaBox.Client
                 }
 
             }
-
             Console.Read();
         }
     }
