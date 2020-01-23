@@ -44,10 +44,10 @@ namespace PizzaBox.Domain
 
             MainMenu();
         }
-
         static void Quit()
         {
             Console.WriteLine("Goodbye");
+            //Program.Rave(Program.Fred2());
             Environment.Exit(-1);
         }
 
@@ -141,7 +141,7 @@ namespace PizzaBox.Domain
                         PressAnyToContinue();
                         break;
                     case "q":
-                        Environment.Exit(-1);
+                        Quit();
                         break;
                 }
             } while (userInput != "q");
@@ -193,7 +193,7 @@ namespace PizzaBox.Domain
                         MainMenu();
                         break;
                     case "q":
-                        Environment.Exit(-1);
+                        Quit();
                         break;
                 }
 
@@ -303,7 +303,7 @@ namespace PizzaBox.Domain
                 }
                 else if (userInput == "q")
                 {
-                    Environment.Exit(-1);
+                    Quit();
                     return;
                 }
             }
@@ -459,7 +459,6 @@ namespace PizzaBox.Domain
 
             } while (userInput != "q");
         }
-
         static void CustomPizzaMenu()
         {
             var customersRepo = Dependencies.CreateCustomerRepository();
@@ -617,7 +616,7 @@ namespace PizzaBox.Domain
                         RestaurantMenu();
                         break;
                     case "q":
-                        Environment.Exit(-1);
+                        Quit();
                         break;
                 }
             } while (userInput != "q");

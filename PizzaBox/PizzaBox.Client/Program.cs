@@ -12,8 +12,10 @@ namespace PizzaBox.Client
             //Console.Write(Fred2());
             //Rave(Fred2());
             //Console.ReadKey(true);
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             MenuSystemManager.MainMenu();
+
         }
 
         public static string Fred()
@@ -61,14 +63,17 @@ namespace PizzaBox.Client
 
         public static void Rave(string f)
         {
-            while (true)
+            int i = 10;
+            while (i > 0)
             {
                 foreach (ConsoleColor color in Enum.GetValues(typeof(ConsoleColor)))
                 {
                     Console.BackgroundColor = color;
                     Console.Write($"{f}");
-                    Thread.Sleep(50);
+                    Thread.Sleep(70);
+                    i--;
                 }
+
             }
         }
 
@@ -82,9 +87,9 @@ namespace PizzaBox.Client
                 Console.ForegroundColor = color;
                 Console.Write(text[i]);
                 color++;
-                if (color == ConsoleColor.Yellow)
+                if (color == ConsoleColor.White)
                 {
-                    color = ConsoleColor.DarkBlue;
+                    color = ConsoleColor.Black;
                 }
 
             }
