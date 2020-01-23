@@ -41,22 +41,22 @@ namespace PizzaBox.Storing.Repositories
 
         }
 
+
         public decimal GetTotalPrice(Pizza p, decimal restaurantMarkup)
         {
             var toppings = p.PizzaToppingsMap.Select(ptm => ptm.Topping).Sum(t => t.Price);
-            decimal pizza = (p.Sauce.Price + p.Cheese.Price + p.Crust.Price) *  (decimal) p.Size.PriceMultiplier.Value;
+            decimal pizza = (p.Sauce.Price + p.Cheese.Price + p.Crust.Price + toppings) *  (decimal) p.Size.PriceMultiplier.Value;
 
-            return toppings + pizza + restaurantMarkup;
+            return pizza + restaurantMarkup;
         }
 
         public decimal GetTotalPrice(Pizza p)
         {
-
             decimal toppings = p.PizzaToppingsMap.Select(m => m.Topping).Sum(t => t.Price);
-            decimal pizza = (p.Sauce.Price + p.Cheese.Price + p.Crust.Price) * (decimal) p.Size.PriceMultiplier.Value;
+            decimal pizza = (p.Sauce.Price + p.Cheese.Price + p.Crust.Price + toppings) * (decimal) p.Size.PriceMultiplier.Value;
             decimal markup = p.RestaurantPizzasMap.Select(m => m.Restaurant).Select(r => r.RestaurantMarkup).Single().Value;
 
-            return toppings + pizza + markup;
+            return pizza + markup;
         }
 
         public decimal GetTotalPrice(int pizzaID)
@@ -109,8 +109,54 @@ namespace PizzaBox.Storing.Repositories
                 return 0;
                 
             }
-
         }
+
+        public decimal GetTotalPrice(int pizzaID, Size size)
+        {
+            var qToppingsPrice = from p in db.Pizza
+                                 from pt in db.PizzaToppingsMap
+                                 from t in db.Toppings
+                                 where p.PizzaId == pt.PizzaId &&
+                                       pt.ToppingId == t.ToppingId &&
+                                       pizzaID == p.PizzaId
+                                 select t.Price;
+
+            var qPizzaNoToppingsPrice = from p in db.Pizza
+                                        from ch in db.Cheese
+                                        from cr in db.Crust
+                                        from sc in db.Sauce
+                                        where p.CheeseId == ch.CheeseId &&
+                                              p.CrustId == cr.CrustId &&
+                                              p.SauceId == sc.SauceId &&
+                                              pizzaID == p.PizzaId
+                                        select ch.Price + cr.Price + sc.Price;
+            try
+            {
+                decimal toppings = qToppingsPrice.Sum();
+                decimal pizza = qPizzaNoToppingsPrice.Single();
+                decimal sizeMult = Convert.ToDecimal(size.PriceMultiplier.Value);
+                decimal totalPrice = (toppings + pizza) * sizeMult;
+                return totalPrice;
+            }
+            catch (InvalidCastException)
+            {
+                // convertion error
+                return 0;
+            }
+            catch (ArgumentNullException)
+            {
+                //sum error
+                return 0;
+            }
+            catch (InvalidOperationException)
+            {
+                // pizzanotoppings error 
+                return 0;
+
+            }
+        }
+
+
 
         public bool SetCurrentPizza(int pizzaID, Restaurants r)
         {
@@ -180,7 +226,7 @@ namespace PizzaBox.Storing.Repositories
             Console.WriteLine($"Crust:".PadRight(10) + p.Crust.CrustName);
             Console.WriteLine($"Sauce:".PadRight(10) + p.Sauce.SauceName);
             Console.WriteLine($"Cheese:".PadRight(10) + p.Cheese.CheeseName);
-            Console.WriteLine($"Size:".PadRight(10) + p.Size.Size1);
+            Console.WriteLine($"Size:".PadRight(10) + p.Size.SizeName);
 
             var toppings = p.PizzaToppingsMap.Select(ptm => ptm.Topping);
 
@@ -195,7 +241,7 @@ namespace PizzaBox.Storing.Repositories
             Console.WriteLine($"Crust:".PadRight(10) + currPizza.Crust.CrustName);
             Console.WriteLine($"Sauce:".PadRight(10) + currPizza.Sauce.SauceName);
             Console.WriteLine($"Cheese:".PadRight(10) + currPizza.Cheese.CheeseName);
-            Console.WriteLine($"Size:".PadRight(10) + currPizza.Size.Size1);
+            Console.WriteLine($"Size:".PadRight(10) + currPizza.Size.SizeName);
         }
 
         public void DisplayToppingsInfo(ICollection<PizzaToppingsMap> maps)
@@ -220,7 +266,7 @@ namespace PizzaBox.Storing.Repositories
             Console.WriteLine($"Crust:".PadRight(10) + currPizza.Crust.CrustName);
             Console.WriteLine($"Sauce:".PadRight(10) + currPizza.Sauce.SauceName);
             Console.WriteLine($"Cheese:".PadRight(10) + currPizza.Cheese.CheeseName);
-            Console.WriteLine($"Size:".PadRight(10) + currPizza.Size.Size1);
+            Console.WriteLine($"Size:".PadRight(10) + currPizza.Size.SizeName);
 
             int i = 0;
             foreach(Toppings t in currToppings)
@@ -240,6 +286,16 @@ namespace PizzaBox.Storing.Repositories
 
         }
 
+        public void SetCurrentPizza(Pizza p)
+        {
+            currPizza = p;
+        }
 
+        public void SetCurrentPizzaSize(int sizeID)
+        {
+            var query = db.Size.Where(s => s.SizeId == sizeID).Single();
+
+            currPizza.Size = query;
+        }
     }
 }

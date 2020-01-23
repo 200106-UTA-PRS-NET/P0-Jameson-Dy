@@ -59,7 +59,7 @@ namespace PizzaBox.Domain
             mainMenuOptions.Add("l", "ListUsers");
             mainMenuOptions.Add("q", "Quit");
 
-            var userInput = "";
+            string userInput;
             do
             {
                 var customersRepo = Dependencies.CreateCustomerRepository();
@@ -151,7 +151,6 @@ namespace PizzaBox.Domain
 
             var orderRepo = Dependencies.CreateOrderRepository();
 
-
             OptionsGenerator userMenuOptions = new OptionsGenerator();
             userMenuOptions.Add("g", "GoToPizzaStore");
             userMenuOptions.Add("h", "ViewOrderHistory");
@@ -160,7 +159,7 @@ namespace PizzaBox.Domain
             userMenuOptions.Add("s", "SignOut");
             userMenuOptions.Add("q", "Quit");
 
-            var userInput = "";
+            string userInput;
             do
             {
                 var customerRepo = Dependencies.CreateCustomerRepository();
@@ -192,7 +191,6 @@ namespace PizzaBox.Domain
                     case "s":
                         customerRepo.SignOut();
                         MainMenu();
-                        //SignOut();
                         break;
                     case "q":
                         Environment.Exit(-1);
@@ -272,7 +270,6 @@ namespace PizzaBox.Domain
 
             var ordersRepo = Dependencies.CreateOrderRepository();
 
-
             OptionsGenerator storeMenu = new OptionsGenerator();
             storeMenu.Add("p", "PresetPizzas");
             storeMenu.Add("c", "CustomPizza(TODO)");
@@ -283,9 +280,7 @@ namespace PizzaBox.Domain
             storeMenu.Add("s", "SignOut");
             storeMenu.Add("q", "Quit");
 
-
-
-            var userInput = "";
+            string userInput;
             do
             {
                 Console.Clear();
@@ -326,7 +321,6 @@ namespace PizzaBox.Domain
                 }
             }
             while (userInput != "q");
-
         }
         static void PresetPizzaMenu()
         {
@@ -340,26 +334,33 @@ namespace PizzaBox.Domain
 
             List<int> pizzaIDList = restaurantsRepo.GetCurrRestaurantPizzaIDList();
 
-
             OptionsGenerator extraMenu = new OptionsGenerator();
             extraMenu.Add("b", "Back to RestaurantMenu");
             extraMenu.Add("q", "Quit");
 
-            OptionsGenerator pizzasMenu = new OptionsGenerator();
+            //OptionsGenerator pizzasMenu = new OptionsGenerator();
 
-            foreach (Pizza p in restaurantsRepo.GetCurrRestaurantPizzas())
-            {
-                pizzasMenu.Add(p.PizzaId.ToString(), p.PizzaName, pizzasRepo.GetTotalPrice(p.PizzaId) + currRestaurant.RestaurantMarkup.Value);
-            }
+            //foreach (Pizza p in restaurantsRepo.GetCurrRestaurantPizzas())
+            //{
+            //    pizzasMenu.Add(p.PizzaId.ToString(), p.PizzaName, pizzasRepo.GetTotalPrice(p.PizzaId) + currRestaurant.RestaurantMarkup.Value);
+            //}
 
-            var userInput = "";
+            string userInput;
             do
             {
                 Console.Clear();
                 Console.WriteLine("\n" + PadMiddle($"Pizza Selection ({currRestaurant.RestaurantName}) ({currCustomer.Username}) "));
-                Console.WriteLine("Code".PadRight(10) + "Pizza".PadRight(30) + "Price");
+                Console.WriteLine("Code".PadRight(10) + "Pizza".PadRight(30) + "Personal".PadRight(10) + "Medium".PadRight(10) + "Large".PadRight(10) + "XLarge");
                 DashPaddings();
-                pizzasMenu.DisplayOptions(1);
+                foreach (Pizza p in restaurantsRepo.GetCurrRestaurantPizzas())
+                {
+                    string pricePersonal = (pizzasRepo.GetTotalPrice(p.PizzaId, new Size { PriceMultiplier = 0.8 }) + currRestaurant.RestaurantMarkup.Value).ToString("0.00");
+                    string priceMedium = (pizzasRepo.GetTotalPrice(p.PizzaId, new Size { PriceMultiplier = 1 }) + currRestaurant.RestaurantMarkup.Value).ToString("0.00");
+                    string priceLarge = (pizzasRepo.GetTotalPrice(p.PizzaId, new Size { PriceMultiplier = 1.5 }) + currRestaurant.RestaurantMarkup.Value).ToString("0.00");
+                    string priceXtraLarge = (pizzasRepo.GetTotalPrice(p.PizzaId, new Size { PriceMultiplier = 2.1 }) + currRestaurant.RestaurantMarkup.Value).ToString("0.00");
+                    Console.WriteLine(p.PizzaId.ToString().PadRight(10) + p.PizzaName.PadRight(30) + pricePersonal.PadRight(10) + priceMedium.PadRight(10) + priceLarge.PadRight(10) +  priceXtraLarge);
+                }
+                //pizzasMenu.DisplayOptions(1);
                 DashPaddings();
                 extraMenu.DisplayOptions();
                 DashPaddings();
@@ -371,8 +372,27 @@ namespace PizzaBox.Domain
                     // numeric input
                     if (pizzaIDList.Contains(pizzaID))
                     {
-                        // select pizza
                         pizzasRepo.SetCurrentPizza(pizzaID, currRestaurant);
+                        Pizza currPizza = pizzasRepo.GetCurrentPizza();
+                        // select pizza
+                        Console.Write("\nSize? (p) (m) (l) (x): " );
+                        userInput = Console.ReadLine();
+                        if (userInput == "p")
+                        {
+                            pizzasRepo.SetCurrentPizzaSize(1);
+                        } 
+                        else if (userInput == "m")
+                        {
+                            pizzasRepo.SetCurrentPizzaSize(2);
+                        }
+                        else if (userInput == "l")
+                        {
+                            pizzasRepo.SetCurrentPizzaSize(3);
+                        }
+                        else if (userInput == "x")
+                        {
+                            pizzasRepo.SetCurrentPizzaSize(4);
+                        }
                         AddPizzaConfirmMenu();
                         break;
                     }
@@ -390,6 +410,7 @@ namespace PizzaBox.Domain
 
             } while (userInput != "q");
         }
+
         static void CustomPizzaMenu()
         {
             var customersRepo = Dependencies.CreateCustomerRepository();
@@ -554,6 +575,7 @@ namespace PizzaBox.Domain
                 }
             } while (userInput != "q");
         }
+
     }
 }
 

@@ -7,11 +7,14 @@ namespace PizzaBox.Domain.Interface
     public interface IPizzasRepo
     {
         public decimal GetTotalPrice(int pizzaID);
+        public decimal GetTotalPrice(int pizzaID, Size size);
         public decimal GetTotalPrice(Pizza p);
         public decimal GetTotalPrice(Pizza p, decimal restaurantMarkup);
 
         public Pizza GetPizzaByID(int pizzaID);
         public bool SetCurrentPizza(int pizzaID, Restaurants r);
+        public void SetCurrentPizza(Pizza p);
+        public void SetCurrentPizzaSize(int sizeID);
         public Pizza GetCurrentPizza();
         public void DisplayCurrPizzaInfo();
         public void DisplayToppingsInfo(ICollection<PizzaToppingsMap> ptm);

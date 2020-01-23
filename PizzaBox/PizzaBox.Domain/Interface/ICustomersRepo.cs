@@ -6,12 +6,14 @@ namespace PizzaBox.Domain.Interface
 {
     public interface ICustomersRepo
     {
+        public bool SignIn(string username, string password);
+
+
         public IEnumerable<Customers> GetCustomers();
         public bool RegisterCustomer(string username, string password, string fname, string lname);
-        public bool SignIn(string username, string password);
+
         public void SignOut();
         public Customers GetCurrentCustomer();
         public void DisplayCurrCustomerInfo();
-        //public List<string> GetUsernames();
     }
 }

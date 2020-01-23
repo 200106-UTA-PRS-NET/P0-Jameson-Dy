@@ -103,12 +103,11 @@ namespace PizzaBox.Storing.Repositories
                     return false;
                 }
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 // username does not exist
                 return false;
             }
-
         }
 
         public void DisplayCurrCustomerInfo()
