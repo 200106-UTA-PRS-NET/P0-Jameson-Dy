@@ -31,7 +31,6 @@ namespace PizzaBox.Client
                        "|__/   |__/       \\_______/ \\_______/\n";
             return f;
         }
-
         public static string Fred2()
         {
             string f =
@@ -60,7 +59,6 @@ namespace PizzaBox.Client
 
             return f;
         }
-
         public static void Rave(string f)
         {
             int i = 10;
@@ -76,7 +74,6 @@ namespace PizzaBox.Client
 
             }
         }
-
         static void Rainbowfy(string text)
         {
             ConsoleColor color = ConsoleColor.Red;
